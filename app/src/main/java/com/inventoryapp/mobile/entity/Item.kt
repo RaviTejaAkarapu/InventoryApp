@@ -16,4 +16,4 @@ data class ItemDetails(
     val measuringUnits: Units
 )
 
-enum class Units {ML, LTR, CM, MTR, MG, GM, KG}
+enum class Units { ML, LTR, CM, MTR, MG, GM, KG }
