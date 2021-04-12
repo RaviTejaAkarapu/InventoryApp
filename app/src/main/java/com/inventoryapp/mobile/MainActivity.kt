@@ -3,7 +3,9 @@ package com.inventoryapp.mobile
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.inventoryapp.mobile.ui.main.MainFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
