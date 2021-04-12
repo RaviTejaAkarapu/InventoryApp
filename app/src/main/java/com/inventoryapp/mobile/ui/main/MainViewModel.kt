@@ -9,5 +9,5 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val itemRepository: ItemRepository
 ) : ViewModel() {
-    fun getAllItemsLiveData() = itemRepository.getAllItemsLiveData()
+//    fun getAllItemsLiveData() = itemRepository.getAllItemsLiveData()
 }
