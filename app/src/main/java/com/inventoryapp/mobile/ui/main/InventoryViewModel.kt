@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class InventoryViewModel @Inject constructor(
     private val itemRepository: ItemRepository
 ) : ViewModel() {
 //    fun getAllItemsLiveData() = itemRepository.getAllItemsLiveData()
