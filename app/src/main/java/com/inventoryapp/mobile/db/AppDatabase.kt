@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.inventoryapp.mobile.dao.ItemDao
 import com.inventoryapp.mobile.entity.Item
 
-@Database(entities = [Item::class], version = 1)
+@Database(entities = [Item::class], version = 1, exportSchema = false)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun itemDao(): ItemDao

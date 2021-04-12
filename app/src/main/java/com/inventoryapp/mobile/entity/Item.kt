@@ -8,12 +8,12 @@ data class Item(
     @PrimaryKey
     val skuId: String,
     val manufacturerName: String?,
-    val itemDetails: ItemDetails?
+    val quantity: Int?
 )
 
-data class ItemDetails(
-    val quantity: Int?,
-    val measuringUnits: Units
-)
-
-enum class Units { ML, LTR, CM, MTR, MG, GM, KG }
+//data class ItemDetails(
+//    val quantity: Int?,
+//    val measuringUnits: Units
+//)
+//
+//enum class Units { ML, LTR, CM, MTR, MG, GM, KG }
