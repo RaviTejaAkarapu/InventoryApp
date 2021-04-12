@@ -22,7 +22,6 @@ class MainFragment : Fragment() {
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
 
-
     companion object {
         fun newInstance() = MainFragment()
     }
