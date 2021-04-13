@@ -50,12 +50,85 @@
         app:layout_constraintTop_toTopOf="@id/fragment_title"
         app:textAllCaps="true" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_title">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/item_search_box_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/item_name"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/item_search_box"
+            app:layout_constraintStart_toStartOf="@id/item_search_box"
+            app:layout_constraintTop_toTopOf="@id/item_search_box" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/item_search_box"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="16dp"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@id/manufacturer_dropdown_box"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/manufacturer_dropdown_box_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/manufacturer"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/manufacturer_dropdown_box"
+            app:layout_constraintStart_toStartOf="@id/manufacturer_dropdown_box"
+            app:layout_constraintTop_toTopOf="@id/manufacturer_dropdown_box" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/manufacturer_dropdown_box"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:padding="24dp"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/item_search_box"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/item_search_box"
+            app:layout_constraintTop_toTopOf="@id/item_search_box" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/item_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="32dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_search_box"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:itemCount="4"
+            tools:listitem="@layout/view_holder_list_item" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <LinearLayout
         android:id="@+id/empty_inventory_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="8dp"
+        tools:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 

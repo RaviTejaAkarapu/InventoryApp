@@ -18,5 +18,5 @@ interface ItemDao {
     fun delete(item: Item)
 
     @Query("SELECT * FROM Item")
-    fun getAllItemsLiveData(): LiveData<List<Item?>?>?
+    fun getAllItemsLiveData(): LiveData<List<Item?>?>
 }

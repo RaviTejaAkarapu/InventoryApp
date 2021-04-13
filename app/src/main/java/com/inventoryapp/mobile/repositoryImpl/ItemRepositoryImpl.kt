@@ -11,7 +11,7 @@ class ItemRepositoryImpl @Inject constructor(
     private val itemCache: ItemCache,
     private val itemRemote: ItemRemote
 ) : ItemRepository {
-    override fun getAllItemsLiveData(): LiveData<List<Item?>?>? =
+    override fun getAllItemsLiveData(): LiveData<List<Item?>?> =
         itemCache.getAllItemsLiveData()
 
 }

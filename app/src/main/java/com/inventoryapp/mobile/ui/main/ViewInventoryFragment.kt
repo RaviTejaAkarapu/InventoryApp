@@ -41,6 +41,20 @@ class ViewInventoryFragment : Fragment() {
                 NetworkStatus.Online -> setNetworkStatusView(isOnline = true)
             }
         }
+
+        viewModel.getAllItemsLiveData().observe(viewLifecycleOwner) { itemList ->
+            if (itemList.isNullOrEmpty())
+                handleItemListView(hasItems = false)
+            else
+                handleItemListView(hasItems = true)
+        }
+    }
+
+    private fun handleItemListView(hasItems: Boolean) {
+        binding.run {
+            emptyInventoryView.isVisible = !hasItems
+            itemListView.isVisible = hasItems
+        }
     }
 
     private fun setNetworkStatusView(isOnline: Boolean) {

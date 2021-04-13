@@ -1,6 +1,11 @@
 <resources>
 
-<!--    View Inventory Fragment-->
+<!--    Common Strings-->
+    <string name="lorem_ipsum">Lorem ipsum</string>
+    <string name="item_name">Item name</string>
+    <string name="manufacturer">Manufacturer</string>
+
+    <!--    View Inventory Fragment-->
     <string name="app_name">Inventory App</string>
     <string name="view_inventory_fragment_name">Store Inventory</string>
     <string name="empty_inventory_view_tite">Your Inventory is Empty</string>

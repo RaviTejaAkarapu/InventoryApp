@@ -5,6 +5,6 @@ import com.inventoryapp.mobile.entity.Item
 
 interface ItemCache {
 
-    fun getAllItemsLiveData(): LiveData<List<Item?>?>?
+    fun getAllItemsLiveData(): LiveData<List<Item?>?>
 
 }
