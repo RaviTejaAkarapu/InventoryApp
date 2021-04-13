@@ -18,7 +18,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-@Module
+@Module(includes = [NetworkMonitorModule::class])
 @InstallIn(SingletonComponent::class)
 interface ItemRepositoryModule {
 
@@ -62,6 +62,5 @@ interface ItemRepositoryModule {
             itemCache: ItemCache,
             itemRemote: ItemRemote
         ) = ItemRepositoryImpl(itemCache, itemRemote)
-
     }
 }
