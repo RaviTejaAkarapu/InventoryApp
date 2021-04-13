@@ -11,7 +11,7 @@ class ListItemViewHolder(private val binding: ViewHolderListItemBinding) :
         binding.apply {
             itemName.text = item.itemName
             manufacturerName.text = item.manufacturerName
-            itemQuantity.text = item.quantity.toString()
+            itemQuantity.text = item.quantity?.toString() ?: "--"
         }
     }
 }

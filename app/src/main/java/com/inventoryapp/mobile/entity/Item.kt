@@ -9,7 +9,7 @@ data class Item(
     val skuId: String,
     val itemName: String?,
     val manufacturerName: String?,
-    val quantity: Int?
+    val quantity: Int? = null
 )
 
 //data class ItemDetails(

@@ -10,10 +10,10 @@ import com.inventoryapp.mobile.databinding.FragmentUploadInventoryBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class UploadInventoryFragment : Fragment() {
+class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener {
 
     private val viewModel by activityViewModels<InventoryViewModel>()
-
+    private lateinit var addItemAdapter: AddItemAdapter
     private var _binding: FragmentUploadInventoryBinding? = null
     private val binding
         get() = _binding!!
@@ -24,6 +24,25 @@ class UploadInventoryFragment : Fragment() {
     ): View {
         _binding = FragmentUploadInventoryBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setView()
+        setListeners()
+    }
+
+    private fun setListeners() {
+        binding.apply {
+        }
+    }
+
+    private fun setView() {
+        binding.addItemRecyclerView.apply {
+            addItemAdapter = AddItemAdapter(this@UploadInventoryFragment)
+            adapter = addItemAdapter
+        }
+        addItemAdapter.addEmptyRow()
     }
 
     override fun onDestroyView() {
