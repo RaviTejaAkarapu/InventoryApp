@@ -10,15 +10,17 @@ import com.inventoryapp.mobile.repository.remote.ItemRemote
 import com.inventoryapp.mobile.repositoryImpl.ItemRepositoryImpl
 import com.inventoryapp.mobile.repositoryImpl.cache.ItemCacheImpl
 import com.inventoryapp.mobile.repositoryImpl.remote.ItemRemoteImpl
+import com.inventoryapp.mobile.service.ItemApi
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
 import javax.inject.Singleton
 
-@Module(includes = [NetworkMonitorModule::class])
+@Module(includes = [NetworkMonitorModule::class, NetworkModule::class])
 @InstallIn(SingletonComponent::class)
 interface ItemRepositoryModule {
 
@@ -42,9 +44,13 @@ interface ItemRepositoryModule {
         @Provides
         @Singleton
         fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
-            return Room.databaseBuilder( appContext,
+            return Room.databaseBuilder(
+                appContext,
                 AppDatabase::class.java,
-                "inventory-database" ).build()
+                "inventory-database"
+            )
+                .fallbackToDestructiveMigration()
+                .build()
         }
 
         @Provides
@@ -52,10 +58,18 @@ interface ItemRepositoryModule {
             appDatabase.itemDao()
 
         @Provides
-        fun provideItemCache(itemDao: ItemDao) = ItemCacheImpl(itemDao)
+        fun provideItemApi(retrofit: Retrofit): ItemApi =
+            retrofit.create(ItemApi::class.java)
 
         @Provides
-        fun provideItemRemote() = ItemRemoteImpl()
+        fun provideItemCache(itemDao: ItemDao) =
+            ItemCacheImpl(itemDao)
+
+        @Provides
+        fun provideItemRemote(
+            itemDao: ItemDao,
+            itemApi: ItemApi
+        ) = ItemRemoteImpl(itemDao, itemApi)
 
         @Provides
         fun provideItemRepository(

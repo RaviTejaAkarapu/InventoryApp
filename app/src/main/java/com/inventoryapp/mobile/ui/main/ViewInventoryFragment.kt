@@ -5,20 +5,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.inventoryapp.mobile.databinding.FragmentViewInventoryBinding
 import com.inventoryapp.mobile.networkNotification.NetworkStatus
+import com.inventoryapp.mobile.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ViewInventoryFragment : Fragment() {
-
-    private val viewModel by activityViewModels<InventoryViewModel>()
+class ViewInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
 
     private var _binding: FragmentViewInventoryBinding? = null
+
     private val binding
         get() = _binding!!
+    private val viewModel by activityViewModels<InventoryViewModel>()
+
+    private lateinit var itemListAdapter: ItemListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,8 +34,16 @@ class ViewInventoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setView()
         setListeners()
         observeViewModel()
+    }
+
+    private fun setView() {
+        binding.itemRecyclerView.apply {
+            itemListAdapter = ItemListAdapter(this@ViewInventoryFragment)
+            adapter = itemListAdapter
+        }
     }
 
     private fun observeViewModel() {
@@ -42,11 +54,24 @@ class ViewInventoryFragment : Fragment() {
             }
         }
 
-        viewModel.getAllItemsLiveData().observe(viewLifecycleOwner) { itemList ->
-            if (itemList.isNullOrEmpty())
-                handleItemListView(hasItems = false)
-            else
-                handleItemListView(hasItems = true)
+        viewModel.allItemsLiveData.observe(viewLifecycleOwner) {
+            when (it.status) {
+                Resource.Status.Success -> {
+                    binding.progressBar.isVisible = false
+                    if (it.data.isNullOrEmpty())
+                        handleItemListView(hasItems = false)
+                    else {
+                        handleItemListView(hasItems = true)
+                        itemListAdapter.setItems(ArrayList(it.data))
+                    }
+                }
+                Resource.Status.Error -> {
+                    binding.progressBar.isVisible = false
+                    Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show()
+                }
+                Resource.Status.Loading ->
+                    binding.progressBar.isVisible = true
+            }
         }
     }
 
@@ -73,5 +98,9 @@ class ViewInventoryFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onClickedItem(skuId: String) {
+
     }
 }

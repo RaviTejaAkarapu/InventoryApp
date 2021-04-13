@@ -9,14 +9,17 @@ import com.inventoryapp.mobile.entity.Item
 interface ItemDao {
 
     @Insert(onConflict = REPLACE)
-    fun insert(item: Item)
+    suspend fun insert(item: Item)
+
+    @Insert(onConflict = REPLACE)
+    suspend fun insertAll(items: List<Item>)
 
     @Update
-    fun update(item: Item)
+    suspend fun update(item: Item)
 
     @Delete
-    fun delete(item: Item)
+    suspend fun delete(item: Item)
 
     @Query("SELECT * FROM Item")
-    fun getAllItemsLiveData(): LiveData<List<Item?>?>
+    fun getAllItemsLiveData(): LiveData<List<Item>>
 }

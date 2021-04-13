@@ -2,17 +2,23 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "8f5c570192ea5d5ac67241b0516c7166",
+    "identityHash": "e7ce4cd1961ca3359b2a75be8cb3d4b1",
     "entities": [
       {
         "tableName": "Item",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`skuId` TEXT NOT NULL, `manufacturerName` TEXT, `quantity` INTEGER, PRIMARY KEY(`skuId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`skuId` TEXT NOT NULL, `itemName` TEXT, `manufacturerName` TEXT, `quantity` INTEGER, PRIMARY KEY(`skuId`))",
         "fields": [
           {
             "fieldPath": "skuId",
             "columnName": "skuId",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "itemName",
+            "columnName": "itemName",
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "manufacturerName",
@@ -40,7 +46,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8f5c570192ea5d5ac67241b0516c7166')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e7ce4cd1961ca3359b2a75be8cb3d4b1')"
     ]
   }
 }
