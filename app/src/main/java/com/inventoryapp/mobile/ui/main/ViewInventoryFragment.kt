@@ -5,14 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.inventoryapp.mobile.databinding.FragmentViewInventoryBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ViewInventoryFragment : Fragment() {
 
-    private val viewModel by viewModels<InventoryViewModel>()
+    private val viewModel by activityViewModels<InventoryViewModel>()
 
     private var _binding: FragmentViewInventoryBinding? = null
     private val binding
@@ -33,7 +33,7 @@ class ViewInventoryFragment : Fragment() {
 
     private fun setListeners() {
         binding.run {
-
+            addOrEditButton.setOnClickListener { viewModel.navigateToUploadInventoryFragment() }
         }
     }
 
