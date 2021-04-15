@@ -18,5 +18,9 @@
         android:id="@+id/uploadInventoryFragment"
         android:name="com.inventoryapp.mobile.ui.main.UploadInventoryFragment"
         android:label="fragment_upload_inventory"
-        tools:layout="@layout/fragment_upload_inventory" />
+        tools:layout="@layout/fragment_upload_inventory" >
+<!--        <argument-->
+<!--            android:name="selectedItemList"-->
+<!--            app:argType="com.inventoryapp.mobile.entity.Item[]"/>-->
+    </fragment>
 </navigation>

@@ -24,6 +24,7 @@ class InventoryViewModel @Inject constructor(
     val inventoryActionLiveData: LiveData<InventoryAction> = mutableInventoryAction
     val networkStatusLiveData: LiveData<NetworkStatus> = networkMonitor
     val allItemsLiveData: LiveData<Resource<List<Item>>> = itemRepository.getItems()
+    lateinit var selectedItemList: List<Item>
 
     init {
         viewModelScope.launch { itemRepository.insertDummyItemsList() }
@@ -39,6 +40,10 @@ class InventoryViewModel @Inject constructor(
 
     fun insertItemListToDb(items: List<Item>) = viewModelScope.launch {
         itemRepository.insertAllItemstoDB(items)
+    }
+
+    fun setSelectedItems(selectedItems: List<Item>) {
+        selectedItemList = selectedItems
     }
 
     sealed class InventoryAction {

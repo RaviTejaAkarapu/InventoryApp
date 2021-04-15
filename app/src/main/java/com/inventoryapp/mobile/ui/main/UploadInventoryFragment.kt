@@ -46,7 +46,7 @@ class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener
             addItemAdapter = AddItemAdapter(this@UploadInventoryFragment)
             adapter = addItemAdapter
         }
-        addItemAdapter.addItems(arrayListOf(Item("", "", "")))
+        addItemAdapter.addItems(viewModel.selectedItemList as ArrayList<Item>? ?: arrayListOf(Item("", "", "")))
     }
 
     override fun onDestroyView() {

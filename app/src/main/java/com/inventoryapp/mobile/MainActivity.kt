@@ -1,12 +1,11 @@
 package com.inventoryapp.mobile
 
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.inventoryapp.mobile.databinding.ActivityMainBinding
+import com.inventoryapp.mobile.entity.Item
 import com.inventoryapp.mobile.ui.main.InventoryViewModel
 import com.inventoryapp.mobile.ui.main.InventoryViewModel.InventoryAction
 import com.inventoryapp.mobile.ui.main.ViewInventoryFragmentDirections

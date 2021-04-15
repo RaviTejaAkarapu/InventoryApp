@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import com.inventoryapp.mobile.R
 import com.inventoryapp.mobile.databinding.FragmentViewInventoryBinding
+import com.inventoryapp.mobile.entity.SelectableItem
 import com.inventoryapp.mobile.networkNotification.NetworkStatus
 import com.inventoryapp.mobile.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,6 +46,14 @@ class ViewInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
             itemListAdapter = ItemListAdapter(this@ViewInventoryFragment)
             adapter = itemListAdapter
         }
+
+        binding.apply {
+            addOrEditButton.text =
+                if (itemListAdapter.getSelectedItems().isNotEmpty())
+                    getString(R.string.edit_button_text)
+                else
+                    getString(R.string.add_button_text)
+        }
     }
 
     private fun observeViewModel() {
@@ -62,7 +72,9 @@ class ViewInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
                         handleItemListView(hasItems = false)
                     else {
                         handleItemListView(hasItems = true)
-                        itemListAdapter.setItems(ArrayList(it.data))
+                        itemListAdapter.setItems(ArrayList(it.data.map { item ->
+                            SelectableItem(item)
+                        }))
                     }
                 }
                 Resource.Status.Error -> {
@@ -91,7 +103,10 @@ class ViewInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
 
     private fun setListeners() {
         binding.run {
-            addOrEditButton.setOnClickListener { viewModel.navigateToUploadInventoryFragment() }
+            addOrEditButton.setOnClickListener {
+                viewModel.setSelectedItems(itemListAdapter.getSelectedItems())
+                viewModel.navigateToUploadInventoryFragment()
+            }
         }
     }
 

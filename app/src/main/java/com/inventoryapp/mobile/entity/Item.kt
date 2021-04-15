@@ -1,7 +1,9 @@
 package com.inventoryapp.mobile.entity
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.versionedparcelable.ParcelField
 
 @Entity
 data class Item(
