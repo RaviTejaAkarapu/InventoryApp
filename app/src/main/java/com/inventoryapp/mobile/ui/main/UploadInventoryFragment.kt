@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.inventoryapp.mobile.databinding.FragmentUploadInventoryBinding
+import com.inventoryapp.mobile.entity.Item
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,6 +35,9 @@ class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener
 
     private fun setListeners() {
         binding.apply {
+            saveButton.setOnClickListener {
+                viewModel.insertItemListToDb(addItemAdapter.itemList)
+            }
         }
     }
 
@@ -42,7 +46,7 @@ class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener
             addItemAdapter = AddItemAdapter(this@UploadInventoryFragment)
             adapter = addItemAdapter
         }
-        addItemAdapter.addEmptyRow()
+        addItemAdapter.addItems(arrayListOf(Item("", "", "")))
     }
 
     override fun onDestroyView() {

@@ -19,6 +19,7 @@
         android:id="@+id/quantity_edit_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:inputType="number"
         app:layout_constraintHorizontal_weight="0.3"
         app:layout_constraintLeft_toRightOf="@id/sku_id_edit_text"
         app:layout_constraintRight_toLeftOf="@id/close_edit_row"

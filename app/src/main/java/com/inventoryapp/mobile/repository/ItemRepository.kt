@@ -11,4 +11,5 @@ interface ItemRepository {
     suspend fun insertDummyItemsList()
 
     fun getItems(): LiveData<Resource<List<Item>>>
+    suspend fun insertAllItemstoDB(items: List<Item>)
 }

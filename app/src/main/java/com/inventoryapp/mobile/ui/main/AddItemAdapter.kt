@@ -14,12 +14,26 @@ class AddItemAdapter(
 
     }
 
-    private val itemList = ArrayList<Item>()
+    val itemList = ArrayList<Item>()
 
     fun addItems(items: ArrayList<Item>) {
         itemList.clear()
         itemList.addAll(items)
         notifyDataSetChanged()
+    }
+
+    override fun updateItem(item: Item, currentPosition: Int, addedEmptyRow: Boolean): Boolean {
+        itemList[currentPosition] = item
+        if (currentPosition == itemCount - 1 && !addedEmptyRow) {
+            itemList.add(Item("", "", ""))
+            notifyItemInserted(itemCount)
+            return true
+        }
+        return addedEmptyRow
+    }
+
+    override fun updateItem(item: Item, currentPosition: Int) {
+        itemList[currentPosition] = item
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddItemViewHolder {
@@ -30,18 +44,17 @@ class AddItemAdapter(
 
     override fun onBindViewHolder(holder: AddItemViewHolder, position: Int) {
         val currentItem = itemList[position]
-        holder.bindItem(currentItem)
-
+        holder.bindItem(currentItem, position)
+        if (position == itemCount - 1)
+            holder.setLastRowListeners()
+        else
+            holder.setListeners()
     }
 
     override fun getItemCount(): Int = itemList.count()
 
-    override fun onCloseRowButtonClicked(skuId: String) {
-        addItems(itemList.filter { item -> item.skuId != skuId } as ArrayList<Item>)
-    }
-
-    override fun addEmptyRow(currentItem: Item) {
-        itemList.add(Item("", "", "", null))
-        notifyDataSetChanged()
+    override fun onCloseRowButtonClicked(position: Int) {
+        if (itemCount > 1)
+            addItems(itemList.filter { item -> item != itemList[position] } as ArrayList<Item>)
     }
 }

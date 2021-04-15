@@ -37,6 +37,10 @@ class InventoryViewModel @Inject constructor(
         mutableInventoryAction.postValue(InventoryAction.NavigateToViewInventoryFragment)
     }
 
+    fun insertItemListToDb(items: List<Item>) = viewModelScope.launch {
+        itemRepository.insertAllItemstoDB(items)
+    }
+
     sealed class InventoryAction {
         object NavigateToUploadInventoryFragment : InventoryAction()
         object NavigateToViewInventoryFragment : InventoryAction()

@@ -20,11 +20,9 @@ class ItemRepositoryImpl @Inject constructor(
         itemRemote.insertItems()
     }
 
-//    fun getCharacter(id: Int) = performGetOperation(
-//        databaseQuery = { localDataSource.getCharacter(id) },
-//        networkCall = { remoteDataSource.getCharacter(id) },
-//        saveCallResult = { localDataSource.insert(it) }
-//    )
+    override suspend fun insertAllItemstoDB(items: List<Item>) {
+        itemCache.insertAll(items)
+    }
 
     override fun getItems() = performGetOperation(
         databaseQuery = { itemCache.getAllItemsLiveData() },
