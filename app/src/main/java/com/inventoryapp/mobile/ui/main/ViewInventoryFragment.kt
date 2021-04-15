@@ -46,7 +46,10 @@ class ViewInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
             itemListAdapter = ItemListAdapter(this@ViewInventoryFragment)
             adapter = itemListAdapter
         }
+        setAddEditButtonText()
+    }
 
+    override fun setAddEditButtonText() {
         binding.apply {
             addOrEditButton.text =
                 if (itemListAdapter.getSelectedItems().isNotEmpty())
@@ -113,9 +116,5 @@ class ViewInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onClickedItem(skuId: String) {
-
     }
 }
