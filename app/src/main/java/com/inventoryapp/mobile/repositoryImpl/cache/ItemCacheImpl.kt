@@ -8,7 +8,17 @@ import com.inventoryapp.mobile.repository.cache.ItemCache
 class ItemCacheImpl constructor(
     private val itemDao: ItemDao
 ) : ItemCache {
-    override fun getAllItemsLiveData(): LiveData<List<Item?>?>? =
-        itemDao.getAllItemsLiveData()
+    override fun getAllItemsLiveData(): LiveData<List<Item>> {
+
+        return itemDao.getAllItemsLiveData()
+    }
+
+    override suspend fun insertAll(items: List<Item>) {
+        itemDao.insertAll(items)
+    }
+
+    override suspend fun deleteAll() {
+        itemDao.deleteAll()
+    }
 
 }
