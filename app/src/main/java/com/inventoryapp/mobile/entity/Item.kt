@@ -14,6 +14,7 @@ data class Item(
     val quantity: Int? = null
 )
 
+fun Item.isEmptyItem(): Boolean = skuId.isEmpty() && quantity == null
 //data class ItemDetails(
 //    val quantity: Int?,
 //    val measuringUnits: Units
