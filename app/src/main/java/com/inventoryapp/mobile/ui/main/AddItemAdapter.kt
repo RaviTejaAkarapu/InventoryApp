@@ -56,5 +56,7 @@ class AddItemAdapter(
     override fun onCloseRowButtonClicked(position: Int) {
         if (itemCount > 1)
             addItems(itemList.filter { item -> item != itemList[position] } as ArrayList<Item>)
+        else
+            addItems(arrayListOf(Item("", "", "")))
     }
 }

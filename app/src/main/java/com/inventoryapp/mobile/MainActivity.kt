@@ -8,6 +8,8 @@ import com.inventoryapp.mobile.databinding.ActivityMainBinding
 import com.inventoryapp.mobile.entity.Item
 import com.inventoryapp.mobile.ui.main.InventoryViewModel
 import com.inventoryapp.mobile.ui.main.InventoryViewModel.InventoryAction
+import com.inventoryapp.mobile.ui.main.SearchInventoryFragmentDirections
+import com.inventoryapp.mobile.ui.main.UploadInventoryFragmentDirections
 import com.inventoryapp.mobile.ui.main.ViewInventoryFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -45,18 +47,28 @@ class MainActivity : AppCompatActivity() {
             when (event) {
                 is InventoryAction.NavigateToUploadInventoryFragment -> navigateToUploadInventoryFragment()
                 is InventoryAction.NavigateToViewInventoryFragment -> navigateToViewInventoryFragment()
+                is InventoryAction.NavigateToSearchInventoryFragment -> navigateToSearchInventoryFragment()
             }
         }
     }
 
+    private fun navigateToSearchInventoryFragment() {
+        if (navController.currentDestination?.id == R.id.uploadInventoryFragment) {
+            navController.navigate(UploadInventoryFragmentDirections.actionUploadInventoryFragmentToSearchInventoryFragment())
+        }
+    }
+
     private fun navigateToUploadInventoryFragment() {
-        if (navController.currentDestination?.id == R.id.viewInventoryFragment) {
-            navController.navigate(ViewInventoryFragmentDirections.actionViewInventoryFragmentToUploadInventoryFragment())
+        when (navController.currentDestination?.id) {
+            R.id.viewInventoryFragment -> navController.navigate(ViewInventoryFragmentDirections.actionViewInventoryFragmentToUploadInventoryFragment())
+            R.id.searchInventoryFragment -> navController.navigate(SearchInventoryFragmentDirections.actionSearchInventoryFragmentToUploadInventoryFragment())
         }
     }
 
     private fun navigateToViewInventoryFragment() {
-        // TODO
+        if (navController.currentDestination?.id == R.id.uploadInventoryFragment) {
+            navController.navigate(UploadInventoryFragmentDirections.actionUploadInventoryFragmentToViewInventoryFragment())
+        }
     }
 
     override fun onDestroy() {

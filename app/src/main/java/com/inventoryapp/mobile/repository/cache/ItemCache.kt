@@ -8,4 +8,6 @@ interface ItemCache {
     fun getAllItemsLiveData(): LiveData<List<Item>>
 
     suspend fun insertAll(items: List<Item>)
+
+    suspend fun deleteAll()
 }

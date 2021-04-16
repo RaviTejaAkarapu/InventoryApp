@@ -25,12 +25,8 @@ class ItemListAdapter(
 
     fun getSelectedItems(): List<Item> =
         itemList
-            .filter { selectableItem ->
-                selectableItem.isSelected == true
-            }
-            .map { selectableItem ->
-                return@map selectableItem.item
-            }
+            .filter { selectableItem -> selectableItem.isSelected == true }
+            .map { selectableItem -> selectableItem.item }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListItemViewHolder {
         val binding =

@@ -14,13 +14,26 @@
             android:id="@+id/action_viewInventoryFragment_to_uploadInventoryFragment"
             app:destination="@id/uploadInventoryFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/searchInventoryFragment"
+        android:name="com.inventoryapp.mobile.ui.main.SearchInventoryFragment"
+        android:label="fragment_search_inventory"
+        tools:layout="@layout/fragment_view_inventory" >
+        <action
+            android:id="@+id/action_searchInventoryFragment_to_uploadInventoryFragment"
+            app:destination="@id/uploadInventoryFragment" />
+    </fragment>
     <fragment
         android:id="@+id/uploadInventoryFragment"
         android:name="com.inventoryapp.mobile.ui.main.UploadInventoryFragment"
         android:label="fragment_upload_inventory"
         tools:layout="@layout/fragment_upload_inventory" >
-<!--        <argument-->
-<!--            android:name="selectedItemList"-->
-<!--            app:argType="com.inventoryapp.mobile.entity.Item[]"/>-->
+        <action
+            android:id="@+id/action_uploadInventoryFragment_to_searchInventoryFragment"
+            app:destination="@id/searchInventoryFragment" />
+        <action
+            android:id="@+id/action_uploadInventoryFragment_to_viewInventoryFragment"
+            app:destination="@id/viewInventoryFragment" />
     </fragment>
 </navigation>

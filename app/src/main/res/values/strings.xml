@@ -15,7 +15,11 @@
     <string name="network_status_offline_text">Offline</string>
     <string name="network_status_online_text">Online</string>
 
-<!--    Uppload Inventory Fragment-->
+<!--    Search Inventory Fragment-->
+    <string name="select_button_text">Select</string>
+    <string name="search_inventory_fragment_name">Search SKUs</string>
+
+    <!--    Uppload Inventory Fragment-->
     <string name="upload_inventory_fragment_name">Upload Inventory</string>
     <string name="search_button_text">Search</string>
     <string name="save_button_text">Save</string>

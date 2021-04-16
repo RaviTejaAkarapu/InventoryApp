@@ -71,14 +71,12 @@ class ViewInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
             when (it.status) {
                 Resource.Status.Success -> {
                     binding.progressBar.isVisible = false
-                    if (it.data.isNullOrEmpty())
-                        handleItemListView(hasItems = false)
-                    else {
-                        handleItemListView(hasItems = true)
-                        itemListAdapter.setItems(ArrayList(it.data.map { item ->
+                    itemListAdapter.setItems(
+                        ArrayList(it.data?.map { item ->
                             SelectableItem(item)
-                        }))
-                    }
+                        })
+                    )
+                    handleItemListView(hasItems = !it.data.isNullOrEmpty())
                 }
                 Resource.Status.Error -> {
                     binding.progressBar.isVisible = false

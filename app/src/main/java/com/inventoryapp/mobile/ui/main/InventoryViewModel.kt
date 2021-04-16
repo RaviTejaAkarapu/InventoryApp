@@ -24,10 +24,12 @@ class InventoryViewModel @Inject constructor(
     val inventoryActionLiveData: LiveData<InventoryAction> = mutableInventoryAction
     val networkStatusLiveData: LiveData<NetworkStatus> = networkMonitor
     val allItemsLiveData: LiveData<Resource<List<Item>>> = itemRepository.getItems()
+    val allItemsFromDb: LiveData<List<Item>> = itemRepository.getAllItemsFromDb()
     lateinit var selectedItemList: List<Item>
 
     init {
-        viewModelScope.launch { itemRepository.insertDummyItemsList() }
+//        viewModelScope.launch { itemRepository.insertDummyItemsList() }
+        viewModelScope.launch { itemRepository.deleteAllItemsFromDB() }
     }
 
     fun navigateToUploadInventoryFragment() {
@@ -36,6 +38,10 @@ class InventoryViewModel @Inject constructor(
 
     fun navigateToViewInventoryFragment() {
         mutableInventoryAction.postValue(InventoryAction.NavigateToViewInventoryFragment)
+    }
+
+    fun navigateToSearchInventoryFragment() {
+        mutableInventoryAction.postValue(InventoryAction.NavigateToSearchInventoryFragment)
     }
 
     fun insertItemListToDb(items: List<Item>) = viewModelScope.launch {
@@ -49,5 +55,6 @@ class InventoryViewModel @Inject constructor(
     sealed class InventoryAction {
         object NavigateToUploadInventoryFragment : InventoryAction()
         object NavigateToViewInventoryFragment : InventoryAction()
+        object NavigateToSearchInventoryFragment : InventoryAction()
     }
 }

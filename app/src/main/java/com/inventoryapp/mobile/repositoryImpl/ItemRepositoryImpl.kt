@@ -12,7 +12,7 @@ class ItemRepositoryImpl @Inject constructor(
     private val itemCache: ItemCache,
     private val itemRemote: ItemRemote
 ) : ItemRepository {
-    override fun getAllItemsLiveData(): LiveData<List<Item>> {
+    override fun getAllItemsFromDb(): LiveData<List<Item>> {
         return itemCache.getAllItemsLiveData()
     }
 
@@ -20,8 +20,8 @@ class ItemRepositoryImpl @Inject constructor(
         itemRemote.insertItems()
     }
 
-    override suspend fun insertAllItemstoDB(items: List<Item>) {
-        itemCache.insertAll(items)
+    override suspend fun deleteAllItemsFromDB() {
+        itemCache.deleteAll()
     }
 
     override fun getItems() = performGetOperation(
@@ -29,5 +29,9 @@ class ItemRepositoryImpl @Inject constructor(
         networkCall = { itemRemote.getItems() },
         saveCallResult = { itemCache.insertAll(it) }
     )
+
+    override suspend fun insertAllItemstoDB(items: List<Item>) {
+        itemCache.insertAll(items)
+    }
 
 }

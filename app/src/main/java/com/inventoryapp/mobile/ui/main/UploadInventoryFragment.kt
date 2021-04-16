@@ -36,7 +36,14 @@ class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener
     private fun setListeners() {
         binding.apply {
             saveButton.setOnClickListener {
-                viewModel.insertItemListToDb(addItemAdapter.itemList)
+                viewModel.insertItemListToDb(
+                    addItemAdapter.itemList.filter { item ->
+                        item.skuId.isNotEmpty()
+                    })
+                viewModel.navigateToViewInventoryFragment()
+            }
+            searchButton.setOnClickListener {
+                viewModel.navigateToSearchInventoryFragment()
             }
         }
     }
@@ -46,7 +53,15 @@ class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener
             addItemAdapter = AddItemAdapter(this@UploadInventoryFragment)
             adapter = addItemAdapter
         }
-        addItemAdapter.addItems(viewModel.selectedItemList as ArrayList<Item>? ?: arrayListOf(Item("", "", "")))
+
+        viewModel.selectedItemList.let {
+            addItemAdapter.addItems(
+                if (it.isNotEmpty())
+                    it as ArrayList<Item>
+                else
+                    arrayListOf(Item("", "", ""))
+            )
+        }
     }
 
     override fun onDestroyView() {

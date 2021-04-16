@@ -17,4 +17,8 @@ class ItemCacheImpl constructor(
         itemDao.insertAll(items)
     }
 
+    override suspend fun deleteAll() {
+        itemDao.deleteAll()
+    }
+
 }
