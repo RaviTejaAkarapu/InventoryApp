@@ -14,10 +14,22 @@ class AddItemViewHolder(
 
     private var currentPosition: Int = 0
 
-    interface AddItemViewHolderActionListener {
-        fun onCloseRowButtonClicked(position: Int)
-        fun updateItem(item: Item, currentPosition: Int)
-        fun checkForExistingSkuId(skuId: String): Item?
+    private val textWatcher = AfterTextChanged {
+        binding.apply {
+            if (skuIdEditText.text?.length == 6) listener.checkForExistingSkuId(skuIdEditText.text.toString())
+            if (!skuIdEditText.text.isNullOrEmpty() && !quantityEditText.text.isNullOrEmpty()) {
+                if (skuIdEditText.text.toString() != currentItem.skuId || quantityEditText.text.toString() != currentItem.quantity.toString()) {
+                    val updatedItem = Item(
+                        skuIdEditText.text.toString(),
+                        currentItem.itemName,
+                        currentItem.manufacturerName,
+                        quantityEditText.text.toString().toInt()
+                    )
+                    currentItem = updatedItem
+                    listener.updateItem(updatedItem, currentPosition)
+                }
+            }
+        }
     }
 
     fun bindItem(item: Item, position: Int) {
@@ -32,13 +44,6 @@ class AddItemViewHolder(
         }
     }
 
-    fun setLastRowListeners() {
-        binding.apply {
-            skuIdEditText.addTextChangedListener(textWatcher)
-            quantityEditText.addTextChangedListener(textWatcher)
-        }
-    }
-
     fun setListeners() {
         binding.apply {
             skuIdEditText.addTextChangedListener(textWatcher)
@@ -46,21 +51,9 @@ class AddItemViewHolder(
         }
     }
 
-    private val textWatcher = AfterTextChanged {
-        binding.apply {
-            if(skuIdEditText.text?.length == 6) listener.checkForExistingSkuId(skuIdEditText.text.toString())
-            if (!skuIdEditText.text.isNullOrEmpty() && !quantityEditText.text.isNullOrEmpty()) {
-                if (skuIdEditText.text.toString() != currentItem.skuId || quantityEditText.text.toString() != currentItem.quantity.toString()) {
-                    val updatedItem = Item(
-                        skuIdEditText.text.toString(),
-                        currentItem.itemName,
-                        currentItem.manufacturerName,
-                        quantityEditText.text.toString().toInt()
-                    )
-                    currentItem = updatedItem
-                    listener.updateItem(updatedItem, currentPosition)
-                }
-            }
-        }
+    interface AddItemViewHolderActionListener {
+        fun onCloseRowButtonClicked(position: Int)
+        fun updateItem(item: Item, currentPosition: Int)
+        fun checkForExistingSkuId(skuId: String): Item?
     }
 }
