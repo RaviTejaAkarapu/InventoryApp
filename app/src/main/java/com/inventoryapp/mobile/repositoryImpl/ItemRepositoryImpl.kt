@@ -34,7 +34,7 @@ class ItemRepositoryImpl @Inject constructor(
         saveCallResult = { itemCache.insertAll(it) }
     )
 
-    override suspend fun getItemsBySkuId(skuId: String): Item =
+    override suspend fun getItemsBySkuId(skuId: String): Item? =
         itemCache.getItemsBySkuId(skuId)
 
     override suspend fun insertAllItemstoDB(items: List<Item>) {

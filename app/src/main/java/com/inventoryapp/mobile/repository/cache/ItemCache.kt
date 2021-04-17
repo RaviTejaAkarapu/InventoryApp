@@ -10,6 +10,6 @@ interface ItemCache {
     suspend fun insertAll(items: List<Item>)
 
     suspend fun deleteAll()
-    suspend fun getItemsBySkuId(skuId: String): Item
+    suspend fun getItemsBySkuId(skuId: String): Item?
     suspend fun getItemsByQuery(query: String): List<Item>?
 }

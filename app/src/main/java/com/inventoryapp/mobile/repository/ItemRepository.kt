@@ -18,5 +18,5 @@ interface ItemRepository {
 
     suspend fun deleteAllItemsFromDB()
 
-    suspend fun getItemsBySkuId(skuId: String): Item
+    suspend fun getItemsBySkuId(skuId: String): Item?
 }

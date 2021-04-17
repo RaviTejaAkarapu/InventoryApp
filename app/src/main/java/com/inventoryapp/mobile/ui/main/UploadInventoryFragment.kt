@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import com.inventoryapp.mobile.databinding.FragmentUploadInventoryBinding
 import com.inventoryapp.mobile.entity.Item
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener {
@@ -101,8 +102,10 @@ class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener
     }
 
     override fun checkForExistingSkuId(skuId: String): Item? {
-//        viewModel.checkForExistingSkuId(skuId)
-//        return viewModel.existingItemWithSkuId.value
-        return null
+        var itemToGet: Item?
+        runBlocking {
+            itemToGet = viewModel.checkForExistingSkuId(skuId)
+        }
+        return itemToGet
     }
 }

@@ -27,7 +27,7 @@ interface ItemDao {
     fun getAllItemsLiveData(): LiveData<List<Item>>
 
     @Query("SELECT * FROM Item where skuId = :skuId")
-    suspend fun getItemsBySkuId(skuId: String): Item
+    suspend fun getItemsBySkuId(skuId: String): Item?
 
     @Query("SELECT * FROM Item where itemName LIKE ('%' || :query || '% - %')")
     suspend fun getItemsByQuery(query: String): List<Item>?

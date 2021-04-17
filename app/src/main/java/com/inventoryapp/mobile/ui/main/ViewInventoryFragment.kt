@@ -51,8 +51,6 @@ class ViewInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
         setEditButtonClickable()
 
         binding.itemSearchBox.addTextChangedListener(textWatcher)
-
-        binding.manufacturerDropdownBox
     }
 
     override fun onResume() {

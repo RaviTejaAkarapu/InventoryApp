@@ -20,7 +20,7 @@ class AddItemViewHolder(
             if (skuIdEditText.text?.length == 6) {
                 listener.checkForExistingSkuId(skuIdEditText.text.toString(), currentPosition)
             }
-            if (!skuIdEditText.text.isNullOrEmpty() && !quantityEditText.text.isNullOrEmpty()) {
+            if (skuIdEditText.text?.length == 6  && !quantityEditText.text.isNullOrEmpty()) {
                 if (skuIdEditText.text.toString() != currentItem.skuId || quantityEditText.text.toString() != currentItem.quantity.toString()) {
                     val updatedItem = Item(
                         skuIdEditText.text.toString(),

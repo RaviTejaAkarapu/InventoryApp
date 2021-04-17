@@ -60,8 +60,8 @@ class InventoryViewModel @Inject constructor(
         mutableNetworkStatus.postValue(isOnline)
     }
 
-    fun checkForExistingSkuId(skuId: String) = viewModelScope.launch {
-        mutableExistingItemWithSkuId.postValue(itemRepository.getItemsBySkuId(skuId))
+    suspend fun checkForExistingSkuId(skuId: String): Item? = withContext(Dispatchers.IO) {
+        return@withContext itemRepository.getItemsBySkuId(skuId)
     }
 
     fun getSKUListFromDb(): List<String> {
