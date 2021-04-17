@@ -25,7 +25,7 @@ class ItemListAdapter(
 
     fun getSelectedItems(): List<Item> =
         itemList
-            .filter { selectableItem -> selectableItem.isSelected == true }
+            .filter { selectableItem -> selectableItem.isSelected }
             .map { selectableItem -> selectableItem.item }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListItemViewHolder {
@@ -38,7 +38,7 @@ class ItemListAdapter(
     override fun onBindViewHolder(holder: ListItemViewHolder, position: Int) {
         val currentItem = itemList[position]
         holder.itemView.setOnClickListener {
-            itemList[position].isSelected = currentItem.isSelected?.not() ?: true
+            itemList[position].isSelected = itemList[position].isSelected.not()
             holder.setItemViewBgColor(itemList[position].isSelected)
             listener.setEditButtonClickable()
         }

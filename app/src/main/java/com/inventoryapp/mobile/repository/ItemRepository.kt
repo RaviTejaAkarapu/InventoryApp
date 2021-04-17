@@ -8,6 +8,8 @@ interface ItemRepository {
 
     fun getAllItemsFromDb(): LiveData<List<Item>>
 
+    suspend fun getItemsByQuery(query: String): List<Item>?
+
     suspend fun insertDummyItemsList()
 
     fun getItems(): LiveData<Resource<List<Item>>>

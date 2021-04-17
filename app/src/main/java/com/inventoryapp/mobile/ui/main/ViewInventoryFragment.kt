@@ -1,18 +1,21 @@
 package com.inventoryapp.mobile.ui.main
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.inventoryapp.mobile.databinding.FragmentViewInventoryBinding
+import com.inventoryapp.mobile.entity.Item
 import com.inventoryapp.mobile.entity.SelectableItem
-import com.inventoryapp.mobile.networkNotification.NetworkStatus
+import com.inventoryapp.mobile.util.AfterTextChanged
 import com.inventoryapp.mobile.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ViewInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
@@ -46,11 +49,29 @@ class ViewInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
             adapter = itemListAdapter
         }
         setEditButtonClickable()
+
+        binding.itemSearchBox.addTextChangedListener(textWatcher)
+
+        binding.manufacturerDropdownBox
     }
 
     override fun onResume() {
         super.onResume()
         observeViewModel()
+    }
+
+    private val textWatcher = AfterTextChanged {
+        var list = mutableListOf<Item>()
+        lifecycleScope.launch {
+            list = viewModel.getItemsByQuery(it.toString()) as MutableList<Item>
+        }.invokeOnCompletion {
+            itemListAdapter.setItems(list.map { item ->
+                SelectableItem(
+                    item,
+                    false
+                )
+            } as ArrayList<SelectableItem>)
+        }
     }
 
     override fun setEditButtonClickable() {
@@ -74,7 +95,7 @@ class ViewInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
                     binding.progressBar.isVisible = false
                     itemListAdapter.setItems(
                         ArrayList(it.data?.map { item ->
-                            SelectableItem(item)
+                            SelectableItem(item, isSelected = false)
                         })
                     )
                     handleItemListView(hasItems = !it.data.isNullOrEmpty())

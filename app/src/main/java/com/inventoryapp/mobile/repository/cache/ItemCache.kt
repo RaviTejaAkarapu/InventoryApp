@@ -11,4 +11,5 @@ interface ItemCache {
 
     suspend fun deleteAll()
     suspend fun getItemsBySkuId(skuId: String): Item
+    suspend fun getItemsByQuery(query: String): List<Item>?
 }

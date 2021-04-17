@@ -15,12 +15,12 @@ class ListItemViewHolder(private val binding: ViewHolderListItemBinding) :
         }
     }
 
-    fun setItemViewBgColor(isSelected: Boolean?) {
+    fun setItemViewBgColor(isSelected: Boolean) {
         binding.root.apply {
-            setBackgroundColor(
+            setBackgroundResource(
                 when (isSelected) {
-                    true -> context.getColor(R.color.online_background)
-                    else -> context.getColor(R.color.white)
+                    true -> R.drawable.list_item_selected_border
+                    else -> R.drawable.list_item_border
                 }
             )
         }

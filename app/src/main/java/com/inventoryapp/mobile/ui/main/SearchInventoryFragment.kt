@@ -8,10 +8,14 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.inventoryapp.mobile.R
 import com.inventoryapp.mobile.databinding.FragmentViewInventoryBinding
+import com.inventoryapp.mobile.entity.Item
 import com.inventoryapp.mobile.entity.SelectableItem
+import com.inventoryapp.mobile.util.AfterTextChanged
 import com.inventoryapp.mobile.util.Resource
+import kotlinx.coroutines.launch
 
 class SearchInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
 
@@ -54,6 +58,22 @@ class SearchInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
             addOrEditButton.setOnClickListener {
                 viewModel.navigateToUploadInventoryFragment()
             }
+
+            itemSearchBox.addTextChangedListener(textWatcher)
+        }
+    }
+
+    private val textWatcher = AfterTextChanged {
+        var list = mutableListOf<Item>()
+        lifecycleScope.launch {
+            list = viewModel.getItemsByQuery(it.toString()) as MutableList<Item>
+        }.invokeOnCompletion {
+            itemListAdapter.setItems(list.map { item ->
+                SelectableItem(
+                    item,
+                    false
+                )
+            } as ArrayList<SelectableItem>)
         }
     }
 
@@ -71,7 +91,7 @@ class SearchInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
                     binding.progressBar.isVisible = false
                     itemListAdapter.setItems(
                         ArrayList(it.data?.map { item ->
-                            SelectableItem(item)
+                            SelectableItem(item, false)
                         })
                     )
                     handleItemListView(hasItems = !it.data.isNullOrEmpty())

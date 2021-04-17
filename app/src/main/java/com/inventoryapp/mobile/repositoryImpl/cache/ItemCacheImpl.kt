@@ -23,4 +23,8 @@ class ItemCacheImpl constructor(
 
     override suspend fun getItemsBySkuId(skuId: String): Item =
         itemDao.getItemsBySkuId(skuId)
+
+    override suspend fun getItemsByQuery(query: String): List<Item>? {
+        return itemDao.getItemsByQuery(query)
+    }
 }

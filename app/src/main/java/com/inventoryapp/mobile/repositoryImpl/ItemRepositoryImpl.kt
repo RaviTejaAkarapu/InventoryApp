@@ -16,6 +16,10 @@ class ItemRepositoryImpl @Inject constructor(
         return itemCache.getAllItemsLiveData()
     }
 
+    override suspend fun getItemsByQuery(query: String): List<Item>? {
+        return itemCache.getItemsByQuery(query)
+    }
+
     override suspend fun insertDummyItemsList() {
         itemRemote.insertItems()
     }

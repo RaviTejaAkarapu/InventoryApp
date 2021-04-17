@@ -9,7 +9,9 @@ import com.inventoryapp.mobile.networkNotification.NetworkMonitor
 import com.inventoryapp.mobile.repository.ItemRepository
 import com.inventoryapp.mobile.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,8 +32,8 @@ class InventoryViewModel @Inject constructor(
     lateinit var selectedItemList: List<Item>
 
     init {
-//        viewModelScope.launch { itemRepository.insertDummyItemsList() }
-        viewModelScope.launch { itemRepository.deleteAllItemsFromDB() }
+        viewModelScope.launch { itemRepository.insertDummyItemsList() }
+//        viewModelScope.launch { itemRepository.deleteAllItemsFromDB() }
     }
 
     fun navigateToUploadInventoryFragment() {
@@ -69,6 +71,11 @@ class InventoryViewModel @Inject constructor(
         }
         return skuList
     }
+
+    suspend fun getItemsByQuery(query: String): List<Item>? = withContext(Dispatchers.IO) {
+        return@withContext itemRepository.getItemsByQuery(query)
+    }
+
 
     sealed class InventoryAction {
         object NavigateToUploadInventoryFragment : InventoryAction()
