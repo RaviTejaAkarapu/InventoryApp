@@ -25,7 +25,6 @@ class AddItemAdapter(
 
     override fun updateItem(item: Item, currentPosition: Int) {
         itemList[currentPosition] = item
-        notifyItemChanged(currentPosition)
         if (currentPosition == itemCount - 1 && !isLastRowEmpty) {
             itemList.add(Item("", "", ""))
             notifyItemInserted(itemCount)
@@ -33,9 +32,9 @@ class AddItemAdapter(
     }
 
     override fun checkForExistingSkuId(skuId: String, currentPosition: Int) {
-        listener.checkForExistingSkuId(skuId)?.let {
-            updateItem(it, currentPosition)
-        }
+//        listener.checkForExistingSkuId(skuId)?.let {
+//            updateItem(it, currentPosition)
+//        }
     }
 
 

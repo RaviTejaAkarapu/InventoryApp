@@ -15,5 +15,6 @@ interface ItemRepository {
     suspend fun insertAllItemstoDB(items: List<Item>)
 
     suspend fun deleteAllItemsFromDB()
+
     suspend fun getItemsBySkuId(skuId: String): Item
 }

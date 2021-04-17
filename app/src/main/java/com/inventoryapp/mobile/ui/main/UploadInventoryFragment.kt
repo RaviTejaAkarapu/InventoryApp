@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -54,11 +55,23 @@ class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener
     private fun setListeners() {
         binding.apply {
             saveButton.setOnClickListener {
-                viewModel.insertItemListToDb(
-                    addItemAdapter.itemList.filter { item ->
-                        item.skuId.isNotEmpty()
-                    })
-                viewModel.navigateToViewInventoryFragment()
+                val itemList = addItemAdapter.itemList
+
+                if (itemList.any { viewModel.getSKUListFromDb().contains(it.skuId).not() })
+                    AlertDialog.Builder(requireContext())
+                        .setTitle("This list has unidentified SKUs")
+                        .setMessage("Please click OK to save only Identified SKUs")
+                        .setPositiveButton("YES") { _, _ ->
+                            viewModel.insertItemListToDb(
+                                itemList.filter { item ->
+                                    viewModel.getSKUListFromDb().contains(item.skuId)
+                                }
+                            )
+                            viewModel.navigateToViewInventoryFragment()
+                        }
+                        .setNegativeButton("NO", null)
+                        .create()
+                        .show()
             }
             searchButton.setOnClickListener {
                 viewModel.navigateToSearchInventoryFragment()
@@ -88,7 +101,8 @@ class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener
     }
 
     override fun checkForExistingSkuId(skuId: String): Item? {
-        viewModel.checkForExistingSkuId(skuId)
-        return viewModel.existingItemWithSkuId.value
+//        viewModel.checkForExistingSkuId(skuId)
+//        return viewModel.existingItemWithSkuId.value
+        return null
     }
 }

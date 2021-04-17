@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.inventoryapp.mobile.entity.Item
 import com.inventoryapp.mobile.networkNotification.NetworkMonitor
-import com.inventoryapp.mobile.networkNotification.NetworkStatus
 import com.inventoryapp.mobile.repository.ItemRepository
 import com.inventoryapp.mobile.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -55,12 +54,20 @@ class InventoryViewModel @Inject constructor(
         selectedItemList = selectedItems
     }
 
-    fun setNetworkStatus(isOnline: Boolean){
+    fun setNetworkStatus(isOnline: Boolean) {
         mutableNetworkStatus.postValue(isOnline)
     }
 
     fun checkForExistingSkuId(skuId: String) = viewModelScope.launch {
         mutableExistingItemWithSkuId.postValue(itemRepository.getItemsBySkuId(skuId))
+    }
+
+    fun getSKUListFromDb(): List<String> {
+        val skuList = mutableListOf<String>()
+        allItemsLiveData.value?.data?.forEach {
+            skuList.add(it.skuId)
+        }
+        return skuList
     }
 
     sealed class InventoryAction {
