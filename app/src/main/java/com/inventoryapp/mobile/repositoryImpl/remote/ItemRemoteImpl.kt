@@ -22,7 +22,9 @@ class ItemRemoteImpl constructor(
     }
 
     override suspend fun getItems() =
-        getResult { itemApi.getAllInventory() }
+        getResult {
+            itemApi.getAllInventory()
+        }
 
     override suspend fun getItemBySku(id: String) =
         getResult { itemApi.getItem(id) }

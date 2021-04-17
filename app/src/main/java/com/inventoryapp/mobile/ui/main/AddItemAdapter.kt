@@ -8,11 +8,11 @@ import com.inventoryapp.mobile.entity.Item
 import com.inventoryapp.mobile.entity.isEmptyItem
 
 class AddItemAdapter(
-    private val addItemActionListener: AddItemActionListener
+    private val listener: AddItemActionListener
 ) : RecyclerView.Adapter<AddItemViewHolder>(), AddItemViewHolder.AddItemViewHolderActionListener {
 
     interface AddItemActionListener {
-
+        fun checkForExistingSkuId(skuId: String): Item?
     }
 
     val itemList = ArrayList<Item>()
@@ -25,16 +25,19 @@ class AddItemAdapter(
 
     override fun updateItem(item: Item, currentPosition: Int) {
         itemList[currentPosition] = item
+        notifyItemChanged(currentPosition)
         if (currentPosition == itemCount - 1 && !isLastRowEmpty) {
             itemList.add(Item("", "", ""))
             notifyItemInserted(itemCount)
         }
     }
 
-    override fun checkForExistingSkuId(skuId: String): Item? {
-//        TODO("Not yet implemented")
-        return null
+    override fun checkForExistingSkuId(skuId: String, currentPosition: Int) {
+        listener.checkForExistingSkuId(skuId)?.let {
+            updateItem(it, currentPosition)
+        }
     }
+
 
     private var isLastRowEmpty =
         if (itemCount > 0)

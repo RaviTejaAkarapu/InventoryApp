@@ -30,10 +30,10 @@ interface NetworkModule {
         @Provides
         fun getRetrofit(okHttpClient: OkHttpClient): Retrofit {
             return Retrofit.Builder()
-                .baseUrl("https://swapi.co/api/")
+                .baseUrl("http://10.0.2.2:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
-                .build();
+                .build()
         }
     }
 }

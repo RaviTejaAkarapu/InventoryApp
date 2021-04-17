@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.inventoryapp.mobile.databinding.FragmentUploadInventoryBinding
@@ -31,6 +32,23 @@ class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener
         super.onViewCreated(view, savedInstanceState)
         setView()
         setListeners()
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewModel.networkStatusLiveData.observe(viewLifecycleOwner) { networkStatus ->
+            when (networkStatus) {
+                false -> setNetworkStatusView(isOnline = false)
+                true -> setNetworkStatusView(isOnline = true)
+            }
+        }
+    }
+
+    private fun setNetworkStatusView(isOnline: Boolean) {
+        binding.run {
+            networkStatusOffline.isVisible = !isOnline
+            networkStatusOnline.isVisible = isOnline
+        }
     }
 
     private fun setListeners() {
@@ -67,5 +85,10 @@ class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun checkForExistingSkuId(skuId: String): Item? {
+        viewModel.checkForExistingSkuId(skuId)
+        return viewModel.existingItemWithSkuId.value
     }
 }

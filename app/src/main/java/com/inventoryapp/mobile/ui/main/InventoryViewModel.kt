@@ -20,11 +20,14 @@ class InventoryViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val mutableInventoryAction = MutableLiveData<InventoryAction>()
+    private val mutableNetworkStatus = MutableLiveData(false)
+    private val mutableExistingItemWithSkuId = MutableLiveData<Item>()
 
     val inventoryActionLiveData: LiveData<InventoryAction> = mutableInventoryAction
-    val networkStatusLiveData: LiveData<NetworkStatus> = networkMonitor
+    val networkStatusLiveData: LiveData<Boolean> = mutableNetworkStatus
     val allItemsLiveData: LiveData<Resource<List<Item>>> = itemRepository.getItems()
     val allItemsFromDb: LiveData<List<Item>> = itemRepository.getAllItemsFromDb()
+    val existingItemWithSkuId: LiveData<Item> = mutableExistingItemWithSkuId
     lateinit var selectedItemList: List<Item>
 
     init {
@@ -50,6 +53,14 @@ class InventoryViewModel @Inject constructor(
 
     fun setSelectedItems(selectedItems: List<Item>) {
         selectedItemList = selectedItems
+    }
+
+    fun setNetworkStatus(isOnline: Boolean){
+        mutableNetworkStatus.postValue(isOnline)
+    }
+
+    fun checkForExistingSkuId(skuId: String) = viewModelScope.launch {
+        mutableExistingItemWithSkuId.postValue(itemRepository.getItemsBySkuId(skuId))
     }
 
     sealed class InventoryAction {

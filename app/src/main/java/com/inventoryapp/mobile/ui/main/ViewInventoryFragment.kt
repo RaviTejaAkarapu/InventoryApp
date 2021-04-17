@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import com.inventoryapp.mobile.R
 import com.inventoryapp.mobile.databinding.FragmentViewInventoryBinding
 import com.inventoryapp.mobile.entity.SelectableItem
 import com.inventoryapp.mobile.networkNotification.NetworkStatus
@@ -46,24 +45,26 @@ class ViewInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
             itemListAdapter = ItemListAdapter(this@ViewInventoryFragment)
             adapter = itemListAdapter
         }
-        setAddEditButtonText()
+        setEditButtonClickable()
     }
 
-    override fun setAddEditButtonText() {
+    override fun onResume() {
+        super.onResume()
+        observeViewModel()
+    }
+
+    override fun setEditButtonClickable() {
         binding.apply {
-            addOrEditButton.text =
-                if (itemListAdapter.getSelectedItems().isNotEmpty())
-                    getString(R.string.edit_button_text)
-                else
-                    getString(R.string.add_button_text)
+            addOrEditButton.isClickable =
+                itemListAdapter.getSelectedItems().isNotEmpty()
         }
     }
 
     private fun observeViewModel() {
         viewModel.networkStatusLiveData.observe(viewLifecycleOwner) { networkStatus ->
             when (networkStatus) {
-                NetworkStatus.Offline -> setNetworkStatusView(isOnline = false)
-                NetworkStatus.Online -> setNetworkStatusView(isOnline = true)
+                false -> setNetworkStatusView(isOnline = false)
+                true -> setNetworkStatusView(isOnline = true)
             }
         }
 
@@ -77,15 +78,29 @@ class ViewInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
                         })
                     )
                     handleItemListView(hasItems = !it.data.isNullOrEmpty())
+                    viewModel.setNetworkStatus(isOnline = true)
                 }
                 Resource.Status.Error -> {
                     binding.progressBar.isVisible = false
                     Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show()
+                    viewModel.setNetworkStatus(isOnline = false)
                 }
-                Resource.Status.Loading ->
+                Resource.Status.Loading -> {
+                    binding.emptyInventoryView.isVisible = false
                     binding.progressBar.isVisible = true
+
+                }
             }
         }
+
+//        viewModel.allItemsFromDb.observe(viewLifecycleOwner) {
+//            itemListAdapter.setItems(
+//                ArrayList(it?.map { item ->
+//                    SelectableItem(item)
+//                })
+//            )
+//            handleItemListView(hasItems = !it.isNullOrEmpty())
+//        }
     }
 
     private fun handleItemListView(hasItems: Boolean) {

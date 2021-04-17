@@ -25,4 +25,7 @@ interface ItemDao {
 
     @Query("SELECT * FROM Item")
     fun getAllItemsLiveData(): LiveData<List<Item>>
+
+    @Query("SELECT * FROM Item where skuId = :skuId")
+    suspend fun getItemsBySkuId(skuId: String): Item
 }

@@ -1,5 +1,6 @@
 package com.inventoryapp.mobile.ui.main
 
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.inventoryapp.mobile.databinding.ViewHolderAddItemBinding
 import com.inventoryapp.mobile.entity.Item
@@ -16,7 +17,9 @@ class AddItemViewHolder(
 
     private val textWatcher = AfterTextChanged {
         binding.apply {
-            if (skuIdEditText.text?.length == 6) listener.checkForExistingSkuId(skuIdEditText.text.toString())
+            if (skuIdEditText.text?.length == 6) {
+                listener.checkForExistingSkuId(skuIdEditText.text.toString(), currentPosition)
+            }
             if (!skuIdEditText.text.isNullOrEmpty() && !quantityEditText.text.isNullOrEmpty()) {
                 if (skuIdEditText.text.toString() != currentItem.skuId || quantityEditText.text.toString() != currentItem.quantity.toString()) {
                     val updatedItem = Item(
@@ -40,6 +43,16 @@ class AddItemViewHolder(
             skuIdEditText.setSelection(skuIdEditText.text.toString().length)
             quantityEditText.setText(item.quantity?.toString())
             quantityEditText.setSelection(quantityEditText.text.toString().length)
+            if (item.itemName.isNullOrEmpty().not()) {
+                itemName.text = item.itemName
+                itemName.isVisible = true
+            }
+            if (item.manufacturerName.isNullOrEmpty().not()) {
+                manufacturerName.text = item.manufacturerName
+                manufacturerName.isVisible = true
+            }
+
+            manufacturerName.text = item.manufacturerName
             closeEditRow.setOnClickListener { listener.onCloseRowButtonClicked(position) }
         }
     }
@@ -54,6 +67,6 @@ class AddItemViewHolder(
     interface AddItemViewHolderActionListener {
         fun onCloseRowButtonClicked(position: Int)
         fun updateItem(item: Item, currentPosition: Int)
-        fun checkForExistingSkuId(skuId: String): Item?
+        fun checkForExistingSkuId(skuId: String, currentPosition: Int)
     }
 }

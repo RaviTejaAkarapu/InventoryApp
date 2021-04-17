@@ -21,4 +21,6 @@ class ItemCacheImpl constructor(
         itemDao.deleteAll()
     }
 
+    override suspend fun getItemsBySkuId(skuId: String): Item =
+        itemDao.getItemsBySkuId(skuId)
 }

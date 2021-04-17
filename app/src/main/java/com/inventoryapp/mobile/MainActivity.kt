@@ -30,6 +30,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        applicationContext.deleteDatabase(
+            "inventory-database"
+        )
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setNavGraph()

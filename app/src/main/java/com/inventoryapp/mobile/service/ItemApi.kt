@@ -7,10 +7,10 @@ import retrofit2.http.Path
 
 interface ItemApi {
 
-    @GET("itemInventory")
+    @GET("api/item/getItems")
     suspend fun getAllInventory() : Response<List<Item>>
 
-    @GET("itemInventory/{skuId}")
-    suspend fun getItem(@Path("id") id: String): Response<Item>
+    @GET("api/item/getItem/{skuId}")
+    suspend fun getItem(@Path("skuId") id: String): Response<Item>
 
 }
