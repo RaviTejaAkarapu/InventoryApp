@@ -55,9 +55,9 @@ class ViewInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
 
         binding.itemSearchBox.addTextChangedListener(textWatcher)
         binding.manufacturerDropdownBox.apply {
-            var manufacturerList: List<String> = mutableListOf()
+            val manufacturerList: MutableList<String> = mutableListOf("Select")
             lifecycleScope.launch {
-                manufacturerList = viewModel.getManufacturerListFromDb()
+                manufacturerList.addAll(viewModel.getManufacturerListFromDb())
             }.invokeOnCompletion {
                 adapter = ArrayAdapter(
                     requireContext(),
@@ -71,17 +71,20 @@ class ViewInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
                         position: Int,
                         id: Long
                     ) {
-                        var list = mutableListOf<Item>()
-                        lifecycleScope.launch {
-                            list =
-                                viewModel.getItemsByManufacturer(manufacturerList[position]) as MutableList<Item>
-                        }.invokeOnCompletion {
-                            itemListAdapter.setItems(list.map { item ->
-                                SelectableItem(
-                                    item,
-                                    false
-                                )
-                            } as ArrayList<SelectableItem>)
+                        if (position == 0) {
+                            viewModel.allItemsLiveData.value?.data?.let {
+                                itemListAdapter.setItems(it.map { item ->
+                                    SelectableItem(item, isSelected = false)
+                                } as ArrayList<SelectableItem>)
+                            }
+                        } else {
+                            val list = mutableListOf<SelectableItem>()
+                            list.addAll(itemListAdapter.itemList.filter { selectableItem ->
+                                selectableItem.item.manufacturerName.equals(manufacturerList[position])
+                            })
+                            itemListAdapter.setItems(
+                                list as ArrayList<SelectableItem>
+                            )
                         }
                     }
 
@@ -150,15 +153,6 @@ class ViewInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
                 }
             }
         }
-
-//        viewModel.allItemsFromDb.observe(viewLifecycleOwner) {
-//            itemListAdapter.setItems(
-//                ArrayList(it?.map { item ->
-//                    SelectableItem(item)
-//                })
-//            )
-//            handleItemListView(hasItems = !it.isNullOrEmpty())
-//        }
     }
 
     private fun handleItemListView(hasItems: Boolean) {

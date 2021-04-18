@@ -15,7 +15,7 @@ class ItemListAdapter(
         fun setEditButtonClickable()
     }
 
-    private val itemList = ArrayList<SelectableItem>()
+    val itemList = ArrayList<SelectableItem>()
 
     fun setItems(items: ArrayList<SelectableItem>) {
         this.itemList.clear()
