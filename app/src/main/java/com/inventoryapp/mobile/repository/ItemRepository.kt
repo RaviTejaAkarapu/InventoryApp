@@ -3,6 +3,7 @@ package com.inventoryapp.mobile.repository
 import androidx.lifecycle.LiveData
 import com.inventoryapp.mobile.entity.Item
 import com.inventoryapp.mobile.util.Resource
+import retrofit2.Response
 
 interface ItemRepository {
 
@@ -25,4 +26,6 @@ interface ItemRepository {
     suspend fun deleteAllItemsFromDB()
 
     suspend fun getItemsBySkuId(skuId: String): Item?
+
+    suspend fun healthCheck(): Response<Boolean>
 }

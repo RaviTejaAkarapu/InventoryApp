@@ -9,9 +9,8 @@ import com.inventoryapp.mobile.networkNotification.NetworkMonitor
 import com.inventoryapp.mobile.repository.ItemRepository
 import com.inventoryapp.mobile.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,12 +20,12 @@ class InventoryViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val mutableInventoryAction = MutableLiveData<InventoryAction>()
-    private val mutableNetworkStatus = MutableLiveData(false)
+    private var mutableNetworkStatus = MutableLiveData<Response<Boolean>?>()
     private val mutableExistingItemWithSkuId = MutableLiveData<HashMap<Int, Item?>>()
     private val mutableGetAllItemsFromDb = MutableLiveData<List<Item>>()
 
     val inventoryActionLiveData: LiveData<InventoryAction> = mutableInventoryAction
-    val networkStatusLiveData: LiveData<Boolean> = mutableNetworkStatus
+    val networkStatusLiveData: LiveData<Response<Boolean>?> = mutableNetworkStatus
     val allItemsLiveData: LiveData<Resource<List<Item>>> = itemRepository.getItems()
 
     val allItemsFromDb: LiveData<List<Item>> = mutableGetAllItemsFromDb
@@ -34,7 +33,7 @@ class InventoryViewModel @Inject constructor(
     lateinit var selectedItemList: List<Item>
 
     init {
-        viewModelScope.launch { itemRepository.insertDummyItemsList() }
+//        viewModelScope.launch { itemRepository.insertDummyItemsList() }
 //        viewModelScope.launch { itemRepository.deleteAllItemsFromDB() }
     }
 
@@ -67,8 +66,21 @@ class InventoryViewModel @Inject constructor(
         selectedItemList = selectedItems
     }
 
-    fun setNetworkStatus(isOnline: Boolean) {
-        mutableNetworkStatus.postValue(isOnline)
+    @OptIn(InternalCoroutinesApi::class)
+    fun setNetworkStatus() {
+        val interval = 1000L
+        viewModelScope.launch(Dispatchers.Unconfined) {
+            while (NonCancellable.isActive) {
+                Result.runCatching {
+                    itemRepository.healthCheck()
+                }.onSuccess {
+                    mutableNetworkStatus.postValue(it)
+                }.onFailure {
+                    mutableNetworkStatus.postValue(null)
+                }
+                delay(interval)
+            }
+        }
     }
 
     fun checkForExistingSkuId(skuId: String, currentPosition: Int) =

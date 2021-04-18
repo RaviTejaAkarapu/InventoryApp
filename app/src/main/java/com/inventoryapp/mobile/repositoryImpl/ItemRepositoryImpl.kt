@@ -6,6 +6,7 @@ import com.inventoryapp.mobile.repository.ItemRepository
 import com.inventoryapp.mobile.repository.cache.ItemCache
 import com.inventoryapp.mobile.repository.remote.ItemRemote
 import com.inventoryapp.mobile.util.performGetOperation
+import retrofit2.Response
 import javax.inject.Inject
 
 class ItemRepositoryImpl @Inject constructor(
@@ -50,6 +51,10 @@ class ItemRepositoryImpl @Inject constructor(
 
     override suspend fun insertAllItemstoDB(items: List<Item>) {
         itemCache.insertAll(items)
+    }
+
+    override suspend fun healthCheck(): Response<Boolean> {
+        return itemRemote.healthCheck()
     }
 
 }

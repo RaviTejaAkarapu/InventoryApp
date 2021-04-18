@@ -27,4 +27,7 @@ class ItemRemoteImpl constructor(
 
     override suspend fun getItemBySku(id: String) =
         getResult { itemApi.getItem(id) }
+
+    override suspend fun healthCheck() =
+        itemApi.healthCheck()
 }

@@ -1,5 +1,6 @@
 package com.inventoryapp.mobile.service
 
+import androidx.lifecycle.LiveData
 import com.inventoryapp.mobile.entity.Item
 import retrofit2.Response
 import retrofit2.http.GET
@@ -12,5 +13,8 @@ interface ItemApi {
 
     @GET("api/item/getItem/{skuId}")
     suspend fun getItem(@Path("skuId") id: String): Response<Item>
+
+    @GET("api/healthcheck")
+    suspend fun healthCheck(): Response<Boolean>
 
 }

@@ -39,10 +39,9 @@ class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener
 
     private fun observeViewModel() {
         viewModel.networkStatusLiveData.observe(viewLifecycleOwner) { networkStatus ->
-            when (networkStatus) {
-                false -> setNetworkStatusView(isOnline = false)
-                true -> setNetworkStatusView(isOnline = true)
-            }
+            networkStatus?.let {
+                setNetworkStatusView(isOnline = it.body() == true)
+            } ?: setNetworkStatusView(isOnline = false)
         }
 
         viewModel.existingItemWithSkuId.observeForChange(viewLifecycleOwner) { map ->

@@ -79,10 +79,9 @@ class SearchInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
 
     private fun observeViewModel() {
         viewModel.networkStatusLiveData.observe(viewLifecycleOwner) { networkStatus ->
-            when (networkStatus) {
-                false -> setNetworkStatusView(isOnline = false)
-                true -> setNetworkStatusView(isOnline = true)
-            }
+            networkStatus?.let {
+                setNetworkStatusView(isOnline = it.body() == true)
+            } ?: setNetworkStatusView(isOnline = false)
         }
 
         viewModel.allItemsLiveData.observe(viewLifecycleOwner) {
@@ -95,12 +94,10 @@ class SearchInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
                         })
                     )
                     handleItemListView(hasItems = !it.data.isNullOrEmpty())
-                    viewModel.setNetworkStatus(isOnline = true)
                 }
                 Resource.Status.Error -> {
                     binding.progressBar.isVisible = false
                     Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show()
-                    viewModel.setNetworkStatus(isOnline = false)
                 }
                 Resource.Status.Loading -> {
                     binding.emptyInventoryView.isVisible = false
