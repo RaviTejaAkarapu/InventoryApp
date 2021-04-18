@@ -20,8 +20,16 @@ class ItemRepositoryImpl @Inject constructor(
         return itemCache.getItemsByQuery(query)
     }
 
+    override suspend fun getItemsByManufacturer(manufacturer: String): List<Item> {
+        return itemCache.getItemsByManufacturer(manufacturer)
+    }
+
     override suspend fun insertDummyItemsList() {
         itemRemote.insertItems()
+    }
+
+    override suspend fun getManufacturerList(): List<String> {
+        return itemCache.getManufacturerList()
     }
 
     override suspend fun deleteAllItemsFromDB() {

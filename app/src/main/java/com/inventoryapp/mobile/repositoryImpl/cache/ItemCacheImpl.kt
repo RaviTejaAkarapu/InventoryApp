@@ -26,4 +26,12 @@ class ItemCacheImpl constructor(
     override suspend fun getItemsByQuery(query: String): List<Item>? {
         return itemDao.getItemsByQuery(query)
     }
+
+    override suspend fun getItemsByManufacturer(manufacturer: String): List<Item> {
+        return itemDao.getItemsByManufacturer(manufacturer)
+    }
+
+    override suspend fun getManufacturerList(): List<String> {
+        return itemDao.getManufacturerList()
+    }
 }

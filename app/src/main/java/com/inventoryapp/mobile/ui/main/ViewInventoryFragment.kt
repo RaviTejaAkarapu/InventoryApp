@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -54,11 +55,40 @@ class ViewInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
 
         binding.itemSearchBox.addTextChangedListener(textWatcher)
         binding.manufacturerDropdownBox.apply {
-            adapter = ArrayAdapter(
-                requireContext(),
-                R.layout.view_holder_spinner_unit,
-                viewModel.getManufacturerListFromDb()
-            )
+            var manufacturerList: List<String> = mutableListOf()
+            lifecycleScope.launch {
+                manufacturerList = viewModel.getManufacturerListFromDb()
+            }.invokeOnCompletion {
+                adapter = ArrayAdapter(
+                    requireContext(),
+                    R.layout.view_holder_spinner_unit,
+                    manufacturerList
+                )
+                onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        var list = mutableListOf<Item>()
+                        lifecycleScope.launch {
+                            list =
+                                viewModel.getItemsByManufacturer(manufacturerList[position]) as MutableList<Item>
+                        }.invokeOnCompletion {
+                            itemListAdapter.setItems(list.map { item ->
+                                SelectableItem(
+                                    item,
+                                    false
+                                )
+                            } as ArrayList<SelectableItem>)
+                        }
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                    }
+                }
+            }
         }
     }
 

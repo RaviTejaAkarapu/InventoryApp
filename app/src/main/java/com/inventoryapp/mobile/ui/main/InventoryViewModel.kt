@@ -80,18 +80,16 @@ class InventoryViewModel @Inject constructor(
         return skuList
     }
 
-    fun getManufacturerListFromDb(): List<String> {
-        val manufacturerList = mutableListOf<String>()
-        allItemsLiveData.value?.data?.forEach {
-            it.manufacturerName?.let { manufacturerName ->
-                manufacturerList.add(manufacturerName)
-            }
-        }
-        return manufacturerList
+    suspend fun getManufacturerListFromDb(): List<String> {
+        return itemRepository.getManufacturerList()
     }
 
     suspend fun getItemsByQuery(query: String): List<Item>? = withContext(Dispatchers.IO) {
         return@withContext itemRepository.getItemsByQuery(query)
+    }
+
+    suspend fun getItemsByManufacturer(manufacturer: String): List<Item> = withContext(Dispatchers.IO) {
+        return@withContext itemRepository.getItemsByManufacturer(manufacturer)
     }
 
     sealed class InventoryAction {

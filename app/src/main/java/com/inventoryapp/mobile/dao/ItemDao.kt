@@ -31,4 +31,9 @@ interface ItemDao {
 
     @Query("SELECT * FROM Item where itemName LIKE ('%' || :query || '% - %')")
     suspend fun getItemsByQuery(query: String): List<Item>?
-}
+
+    @Query("SELECT * FROM Item where manufacturerName LIKE :manufacturer")
+    suspend fun getItemsByManufacturer(manufacturer: String): List<Item>
+
+    @Query("SELECT DISTINCT manufacturerName FROM Item")
+    suspend fun getManufacturerList(): List<String>}
