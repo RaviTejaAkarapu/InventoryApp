@@ -12,8 +12,11 @@ class ItemRepositoryImpl @Inject constructor(
     private val itemCache: ItemCache,
     private val itemRemote: ItemRemote
 ) : ItemRepository {
-    override fun getAllItemsFromDb(): LiveData<List<Item>> {
-        return itemCache.getAllItemsLiveData()
+    override suspend fun getAllItemsFromDb(): List<Item> {
+        return itemCache.getAllItemsFromDb()
+    }
+    override fun getAllItemsFromDbLiveData(): LiveData<List<Item>> {
+        return itemCache.getAllItemsFromDbLiveData()
     }
 
     override suspend fun getItemsByQuery(query: String): List<Item>? {
@@ -37,7 +40,7 @@ class ItemRepositoryImpl @Inject constructor(
     }
 
     override fun getItems() = performGetOperation(
-        databaseQuery = { itemCache.getAllItemsLiveData() },
+        databaseQuery = { itemCache.getAllItemsFromDbLiveData() },
         networkCall = { itemRemote.getItems() },
         saveCallResult = { itemCache.insertAll(it) }
     )

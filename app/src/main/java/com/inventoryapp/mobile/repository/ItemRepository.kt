@@ -6,7 +6,9 @@ import com.inventoryapp.mobile.util.Resource
 
 interface ItemRepository {
 
-    fun getAllItemsFromDb(): LiveData<List<Item>>
+    suspend fun getAllItemsFromDb(): List<Item>
+
+    fun getAllItemsFromDbLiveData(): LiveData<List<Item>>
 
     fun getItems(): LiveData<Resource<List<Item>>>
 

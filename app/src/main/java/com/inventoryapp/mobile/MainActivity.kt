@@ -5,12 +5,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.inventoryapp.mobile.databinding.ActivityMainBinding
-import com.inventoryapp.mobile.entity.Item
-import com.inventoryapp.mobile.ui.main.InventoryViewModel
+import com.inventoryapp.mobile.ui.main.*
 import com.inventoryapp.mobile.ui.main.InventoryViewModel.InventoryAction
-import com.inventoryapp.mobile.ui.main.SearchInventoryFragmentDirections
-import com.inventoryapp.mobile.ui.main.UploadInventoryFragmentDirections
-import com.inventoryapp.mobile.ui.main.ViewInventoryFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -57,13 +53,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun navigateToSearchInventoryFragment() {
         if (navController.currentDestination?.id == R.id.uploadInventoryFragment) {
-            navController.navigate(UploadInventoryFragmentDirections.actionUploadInventoryFragmentToSearchInventoryFragment())
+            navController.navigate(UploadInventoryFragmentDirections.actionUploadInventoryFragmentToViewInventoryFragment(InventoryFragment.InventoryViewAction.SEARCH))
         }
     }
 
     private fun navigateToUploadInventoryFragment() {
         when (navController.currentDestination?.id) {
-            R.id.viewInventoryFragment -> navController.navigate(ViewInventoryFragmentDirections.actionViewInventoryFragmentToUploadInventoryFragment())
+            R.id.viewInventoryFragment -> navController.navigate(InventoryFragmentDirections.actionViewInventoryFragmentToUploadInventoryFragment())
             R.id.searchInventoryFragment -> navController.navigate(SearchInventoryFragmentDirections.actionSearchInventoryFragmentToUploadInventoryFragment())
         }
     }

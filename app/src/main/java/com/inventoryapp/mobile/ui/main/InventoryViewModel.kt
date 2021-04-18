@@ -23,12 +23,13 @@ class InventoryViewModel @Inject constructor(
     private val mutableInventoryAction = MutableLiveData<InventoryAction>()
     private val mutableNetworkStatus = MutableLiveData(false)
     private val mutableExistingItemWithSkuId = MutableLiveData<HashMap<Int, Item?>>()
+    private val mutableGetAllItemsFromDb = MutableLiveData<List<Item>>()
 
     val inventoryActionLiveData: LiveData<InventoryAction> = mutableInventoryAction
     val networkStatusLiveData: LiveData<Boolean> = mutableNetworkStatus
     val allItemsLiveData: LiveData<Resource<List<Item>>> = itemRepository.getItems()
 
-    //    val allItemsFromDb: LiveData<List<Item>> = itemRepository.getAllItemsFromDb()
+    val allItemsFromDb: LiveData<List<Item>> = mutableGetAllItemsFromDb
     val existingItemWithSkuId: LiveData<HashMap<Int, Item?>> = mutableExistingItemWithSkuId
     lateinit var selectedItemList: List<Item>
 
@@ -36,6 +37,15 @@ class InventoryViewModel @Inject constructor(
         viewModelScope.launch { itemRepository.insertDummyItemsList() }
 //        viewModelScope.launch { itemRepository.deleteAllItemsFromDB() }
     }
+
+    fun getAllItemsFromDb() =
+        viewModelScope.launch(Dispatchers.IO) {
+            Result.runCatching {
+                itemRepository.getAllItemsFromDb()
+            }.onSuccess { itemList ->
+                mutableGetAllItemsFromDb.postValue(itemList)
+            }
+        }
 
     fun navigateToUploadInventoryFragment() {
         mutableInventoryAction.postValue(InventoryAction.NavigateToUploadInventoryFragment)
@@ -74,7 +84,7 @@ class InventoryViewModel @Inject constructor(
 
     fun getSKUListFromDb(): List<String> {
         val skuList = mutableListOf<String>()
-        allItemsLiveData.value?.data?.forEach {
+        allItemsFromDb.value?.forEach {
             skuList.add(it.skuId)
         }
         return skuList
@@ -88,9 +98,10 @@ class InventoryViewModel @Inject constructor(
         return@withContext itemRepository.getItemsByQuery(query)
     }
 
-    suspend fun getItemsByManufacturer(manufacturer: String): List<Item> = withContext(Dispatchers.IO) {
-        return@withContext itemRepository.getItemsByManufacturer(manufacturer)
-    }
+    suspend fun getItemsByManufacturer(manufacturer: String): List<Item> =
+        withContext(Dispatchers.IO) {
+            return@withContext itemRepository.getItemsByManufacturer(manufacturer)
+        }
 
     sealed class InventoryAction {
         object NavigateToUploadInventoryFragment : InventoryAction()

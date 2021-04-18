@@ -8,8 +8,8 @@ import com.inventoryapp.mobile.repository.cache.ItemCache
 class ItemCacheImpl constructor(
     private val itemDao: ItemDao
 ) : ItemCache {
-    override fun getAllItemsLiveData(): LiveData<List<Item>> {
-        return itemDao.getAllItemsLiveData()
+    override suspend fun getAllItemsFromDb(): List<Item> {
+        return itemDao.getAllItems()
     }
 
     override suspend fun insertAll(items: List<Item>) {
@@ -33,5 +33,9 @@ class ItemCacheImpl constructor(
 
     override suspend fun getManufacturerList(): List<String> {
         return itemDao.getManufacturerList()
+    }
+
+    override fun getAllItemsFromDbLiveData(): LiveData<List<Item>> {
+        return itemDao.getAllItemsLiveData()
     }
 }

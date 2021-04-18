@@ -7,12 +7,17 @@
 
     <fragment
         android:id="@+id/viewInventoryFragment"
-        android:name="com.inventoryapp.mobile.ui.main.ViewInventoryFragment"
+        android:name="com.inventoryapp.mobile.ui.main.InventoryFragment"
         android:label="fragment_view_inventory"
         tools:layout="@layout/fragment_view_inventory" >
         <action
             android:id="@+id/action_viewInventoryFragment_to_uploadInventoryFragment"
             app:destination="@id/uploadInventoryFragment" />
+        <argument
+            android:name="InventoryViewAction"
+            app:argType="com.inventoryapp.mobile.ui.main.InventoryFragment$InventoryViewAction"
+            android:defaultValue="VIEW" />
+
     </fragment>
 
     <fragment

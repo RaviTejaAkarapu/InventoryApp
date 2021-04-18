@@ -24,6 +24,9 @@ interface ItemDao {
     suspend fun deleteAll()
 
     @Query("SELECT * FROM Item")
+    fun getAllItems(): List<Item>
+
+    @Query("SELECT * FROM Item")
     fun getAllItemsLiveData(): LiveData<List<Item>>
 
     @Query("SELECT * FROM Item where skuId = :skuId")
