@@ -27,7 +27,8 @@ class InventoryViewModel @Inject constructor(
     val inventoryActionLiveData: LiveData<InventoryAction> = mutableInventoryAction
     val networkStatusLiveData: LiveData<Boolean> = mutableNetworkStatus
     val allItemsLiveData: LiveData<Resource<List<Item>>> = itemRepository.getItems()
-//    val allItemsFromDb: LiveData<List<Item>> = itemRepository.getAllItemsFromDb()
+
+    //    val allItemsFromDb: LiveData<List<Item>> = itemRepository.getAllItemsFromDb()
     val existingItemWithSkuId: LiveData<HashMap<Int, Item?>> = mutableExistingItemWithSkuId
     lateinit var selectedItemList: List<Item>
 
@@ -60,15 +61,16 @@ class InventoryViewModel @Inject constructor(
         mutableNetworkStatus.postValue(isOnline)
     }
 
-    fun checkForExistingSkuId(skuId: String, currentPosition: Int) = viewModelScope.launch(Dispatchers.IO) {
-        Result.runCatching {
-            itemRepository.getItemsBySkuId(skuId)
-        }.onSuccess { item ->
-            val map = HashMap<Int, Item?>()
-            map[currentPosition] = item
-            mutableExistingItemWithSkuId.postValue(map)
+    fun checkForExistingSkuId(skuId: String, currentPosition: Int) =
+        viewModelScope.launch(Dispatchers.IO) {
+            Result.runCatching {
+                itemRepository.getItemsBySkuId(skuId)
+            }.onSuccess { item ->
+                val map = HashMap<Int, Item?>()
+                map[currentPosition] = item
+                mutableExistingItemWithSkuId.postValue(map)
+            }
         }
-    }
 
     fun getSKUListFromDb(): List<String> {
         val skuList = mutableListOf<String>()
@@ -76,6 +78,16 @@ class InventoryViewModel @Inject constructor(
             skuList.add(it.skuId)
         }
         return skuList
+    }
+
+    fun getManufacturerListFromDb(): List<String> {
+        val manufacturerList = mutableListOf<String>()
+        allItemsLiveData.value?.data?.forEach {
+            it.manufacturerName?.let { manufacturerName ->
+                manufacturerList.add(manufacturerName)
+            }
+        }
+        return manufacturerList
     }
 
     suspend fun getItemsByQuery(query: String): List<Item>? = withContext(Dispatchers.IO) {

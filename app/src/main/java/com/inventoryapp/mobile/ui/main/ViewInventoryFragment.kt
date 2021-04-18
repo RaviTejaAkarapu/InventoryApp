@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.inventoryapp.mobile.R
 import com.inventoryapp.mobile.databinding.FragmentViewInventoryBinding
 import com.inventoryapp.mobile.entity.Item
 import com.inventoryapp.mobile.entity.SelectableItem
@@ -51,6 +53,13 @@ class ViewInventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
         setEditButtonClickable()
 
         binding.itemSearchBox.addTextChangedListener(textWatcher)
+        binding.manufacturerDropdownBox.apply {
+            adapter = ArrayAdapter(
+                requireContext(),
+                R.layout.view_holder_spinner_unit,
+                viewModel.getManufacturerListFromDb()
+            )
+        }
     }
 
     override fun onResume() {
