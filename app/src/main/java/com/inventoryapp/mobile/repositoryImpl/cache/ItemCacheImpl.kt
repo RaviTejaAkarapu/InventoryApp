@@ -9,7 +9,6 @@ class ItemCacheImpl constructor(
     private val itemDao: ItemDao
 ) : ItemCache {
     override fun getAllItemsLiveData(): LiveData<List<Item>> {
-
         return itemDao.getAllItemsLiveData()
     }
 

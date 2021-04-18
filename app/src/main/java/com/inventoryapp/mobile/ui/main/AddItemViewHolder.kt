@@ -1,6 +1,7 @@
 package com.inventoryapp.mobile.ui.main
 
-import androidx.core.view.isVisible
+import android.view.View
+import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import com.inventoryapp.mobile.databinding.ViewHolderAddItemBinding
 import com.inventoryapp.mobile.entity.Item
@@ -20,16 +21,25 @@ class AddItemViewHolder(
             if (skuIdEditText.text?.length == 6) {
                 listener.checkForExistingSkuId(skuIdEditText.text.toString(), currentPosition)
             }
-            if (skuIdEditText.text?.length == 6  && !quantityEditText.text.isNullOrEmpty()) {
-                if (skuIdEditText.text.toString() != currentItem.skuId || quantityEditText.text.toString() != currentItem.quantity.toString()) {
-                    val updatedItem = Item(
-                        skuIdEditText.text.toString(),
-                        currentItem.itemName,
-                        currentItem.manufacturerName,
-                        quantityEditText.text.toString().toInt()
-                    )
-                    currentItem = updatedItem
-                    listener.updateItem(updatedItem, currentPosition)
+        }
+    }
+
+    private val focusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
+        when (view) {
+            is EditText -> {
+                binding.apply {
+                    if (skuIdEditText.text?.length == 6 && !quantityEditText.text.isNullOrEmpty()) {
+                        if (skuIdEditText.text.toString() != currentItem.skuId || quantityEditText.text.toString() != currentItem.quantity.toString()) {
+                            val updatedItem = Item(
+                                skuIdEditText.text.toString(),
+                                currentItem.itemName,
+                                currentItem.manufacturerName,
+                                quantityEditText.text.toString().toInt()
+                            )
+                            currentItem = updatedItem
+                            listener.updateItem(updatedItem, currentPosition)
+                        }
+                    }
                 }
             }
         }
@@ -43,15 +53,8 @@ class AddItemViewHolder(
             skuIdEditText.setSelection(skuIdEditText.text.toString().length)
             quantityEditText.setText(item.quantity?.toString())
             quantityEditText.setSelection(quantityEditText.text.toString().length)
-            if (item.itemName.isNullOrEmpty().not()) {
-                itemName.text = item.itemName
-                itemName.isVisible = true
-            }
-            if (item.manufacturerName.isNullOrEmpty().not()) {
-                manufacturerName.text = item.manufacturerName
-                manufacturerName.isVisible = true
-            }
-
+            itemName.text = item.itemName
+            manufacturerName.text = item.manufacturerName
             manufacturerName.text = item.manufacturerName
             closeEditRow.setOnClickListener { listener.onCloseRowButtonClicked(position) }
         }
@@ -60,7 +63,7 @@ class AddItemViewHolder(
     fun setListeners() {
         binding.apply {
             skuIdEditText.addTextChangedListener(textWatcher)
-            quantityEditText.addTextChangedListener(textWatcher)
+            quantityEditText.onFocusChangeListener = focusChangeListener
         }
     }
 

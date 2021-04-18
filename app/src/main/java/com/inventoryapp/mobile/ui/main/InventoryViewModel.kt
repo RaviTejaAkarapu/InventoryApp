@@ -22,13 +22,13 @@ class InventoryViewModel @Inject constructor(
 
     private val mutableInventoryAction = MutableLiveData<InventoryAction>()
     private val mutableNetworkStatus = MutableLiveData(false)
-    private val mutableExistingItemWithSkuId = MutableLiveData<Item>()
+    private val mutableExistingItemWithSkuId = MutableLiveData<HashMap<Int, Item?>>()
 
     val inventoryActionLiveData: LiveData<InventoryAction> = mutableInventoryAction
     val networkStatusLiveData: LiveData<Boolean> = mutableNetworkStatus
     val allItemsLiveData: LiveData<Resource<List<Item>>> = itemRepository.getItems()
-    val allItemsFromDb: LiveData<List<Item>> = itemRepository.getAllItemsFromDb()
-    val existingItemWithSkuId: LiveData<Item> = mutableExistingItemWithSkuId
+//    val allItemsFromDb: LiveData<List<Item>> = itemRepository.getAllItemsFromDb()
+    val existingItemWithSkuId: LiveData<HashMap<Int, Item?>> = mutableExistingItemWithSkuId
     lateinit var selectedItemList: List<Item>
 
     init {
@@ -60,8 +60,14 @@ class InventoryViewModel @Inject constructor(
         mutableNetworkStatus.postValue(isOnline)
     }
 
-    suspend fun checkForExistingSkuId(skuId: String): Item? = withContext(Dispatchers.IO) {
-        return@withContext itemRepository.getItemsBySkuId(skuId)
+    fun checkForExistingSkuId(skuId: String, currentPosition: Int) = viewModelScope.launch(Dispatchers.IO) {
+        Result.runCatching {
+            itemRepository.getItemsBySkuId(skuId)
+        }.onSuccess { item ->
+            val map = HashMap<Int, Item?>()
+            map[currentPosition] = item
+            mutableExistingItemWithSkuId.postValue(map)
+        }
     }
 
     fun getSKUListFromDb(): List<String> {
@@ -75,7 +81,6 @@ class InventoryViewModel @Inject constructor(
     suspend fun getItemsByQuery(query: String): List<Item>? = withContext(Dispatchers.IO) {
         return@withContext itemRepository.getItemsByQuery(query)
     }
-
 
     sealed class InventoryAction {
         object NavigateToUploadInventoryFragment : InventoryAction()

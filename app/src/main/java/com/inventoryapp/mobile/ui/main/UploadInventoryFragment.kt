@@ -10,8 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.inventoryapp.mobile.databinding.FragmentUploadInventoryBinding
 import com.inventoryapp.mobile.entity.Item
+import com.inventoryapp.mobile.util.observeForChange
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener {
@@ -44,6 +44,14 @@ class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener
                 true -> setNetworkStatusView(isOnline = true)
             }
         }
+
+        viewModel.existingItemWithSkuId.observeForChange(viewLifecycleOwner) { map ->
+            map.forEach { (position, item) ->
+                item?.let {
+                    addItemAdapter.updateItem(item, position)
+                }
+            }
+        }
     }
 
     private fun setNetworkStatusView(isOnline: Boolean) {
@@ -56,8 +64,7 @@ class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener
     private fun setListeners() {
         binding.apply {
             saveButton.setOnClickListener {
-                val itemList = addItemAdapter.itemList
-
+                val itemList = addItemAdapter.itemList.filter { item -> item.skuId.isNotEmpty() }
                 if (itemList.any { viewModel.getSKUListFromDb().contains(it.skuId).not() })
                     AlertDialog.Builder(requireContext())
                         .setTitle("This list has unidentified SKUs")
@@ -73,6 +80,14 @@ class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener
                         .setNegativeButton("NO", null)
                         .create()
                         .show()
+                else {
+                    viewModel.insertItemListToDb(
+                        itemList.filter { item ->
+                            viewModel.getSKUListFromDb().contains(item.skuId)
+                        }
+                    )
+                    viewModel.navigateToViewInventoryFragment()
+                }
             }
             searchButton.setOnClickListener {
                 viewModel.navigateToSearchInventoryFragment()
@@ -101,11 +116,7 @@ class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener
         _binding = null
     }
 
-    override fun checkForExistingSkuId(skuId: String): Item? {
-        var itemToGet: Item?
-        runBlocking {
-            itemToGet = viewModel.checkForExistingSkuId(skuId)
-        }
-        return itemToGet
+    override fun checkForExistingSkuId(skuId: String, currentPosition: Int) {
+        viewModel.checkForExistingSkuId(skuId, currentPosition)
     }
 }

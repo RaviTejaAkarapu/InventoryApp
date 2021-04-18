@@ -12,7 +12,7 @@ class AddItemAdapter(
 ) : RecyclerView.Adapter<AddItemViewHolder>(), AddItemViewHolder.AddItemViewHolderActionListener {
 
     interface AddItemActionListener {
-        fun checkForExistingSkuId(skuId: String): Item?
+        fun checkForExistingSkuId(skuId: String, currentPosition: Int)
     }
 
     val itemList = ArrayList<Item>()
@@ -24,20 +24,22 @@ class AddItemAdapter(
     }
 
     override fun updateItem(item: Item, currentPosition: Int) {
-        itemList[currentPosition] = item
-//        notifyItemChanged(currentPosition)
-        if (currentPosition == itemCount - 1 && !isLastRowEmpty) {
-            itemList.add(Item("", "", ""))
-            notifyItemInserted(itemCount)
+        val currentItem = itemList[currentPosition]
+        if (currentItem != item) {
+            itemList[currentPosition] = item
+            notifyItemChanged(currentPosition)
+            if (itemCount > 0) {
+                if (currentPosition == itemCount - 1 && !isLastRowEmpty) {
+                    itemList.add(Item("", "", ""))
+                    notifyItemInserted(itemCount)
+                }
+            }
         }
     }
 
     override fun checkForExistingSkuId(skuId: String, currentPosition: Int) {
-        listener.checkForExistingSkuId(skuId)?.let {
-            updateItem(it, currentPosition)
-        }
+        listener.checkForExistingSkuId(skuId, currentPosition)
     }
-
 
     private var isLastRowEmpty =
         if (itemCount > 0)
