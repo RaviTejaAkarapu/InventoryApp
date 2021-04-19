@@ -32,8 +32,6 @@ class InventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
     private lateinit var itemListAdapter: ItemListAdapter
     private lateinit var fragmentView: InventoryViewAction
 
-    private lateinit var currentItemList: List<Item>
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -96,14 +94,14 @@ class InventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
                             id: Long
                         ) {
                             if (position == 0) {
-                                currentItemList.let {
+                                viewModel.currentItemList.let {
                                     itemListAdapter.setItems(it.map { item ->
                                         SelectableItem(item, isSelected = false)
                                     } as ArrayList<SelectableItem>)
                                 }
                             } else {
                                 val itemsFromManufacturer =
-                                    currentItemList.map { SelectableItem(it, false) }
+                                    viewModel.currentItemList.map { SelectableItem(it, false) }
                                         .filter { selectableItem ->
                                             selectableItem.item.manufacturerName.equals(
                                                 manufacturerList[position]
@@ -145,7 +143,8 @@ class InventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
     override fun setEditButtonClickable() {
         binding.apply {
             addOrEditButton.isEnabled =
-                itemListAdapter.getSelectedItems().isNotEmpty() && currentItemList.isNotEmpty()
+                itemListAdapter.getSelectedItems()
+                    .isNotEmpty() && viewModel.currentItemList.isNotEmpty()
         }
     }
 
@@ -160,7 +159,7 @@ class InventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
             viewModel.allItemsLiveData.observe(viewLifecycleOwner) {
                 when (it.status) {
                     Resource.Status.Success -> {
-                        currentItemList = it.data ?: mutableListOf()
+                        viewModel.currentItemList = it.data ?: mutableListOf()
                         binding.progressBar.isVisible = false
                         itemListAdapter.setItems(
                             ArrayList(it.data?.map { item ->
@@ -181,7 +180,7 @@ class InventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
             }
         else
             viewModel.allItemsFromDb.observeForChange(viewLifecycleOwner) { itemList ->
-                currentItemList = itemList
+                viewModel.currentItemList = itemList
                 binding.progressBar.isVisible = true
                 binding.emptyInventoryView.isVisible = itemList.isNullOrEmpty()
                 itemListAdapter.setItems(
@@ -226,7 +225,3 @@ class InventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
         SEARCH
     }
 }
-
-//fun <Item> List<Item>.toSelectableItem() = this.map { item ->
-//    SelectableItem(item, isSelected = false)
-//}

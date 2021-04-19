@@ -1,9 +1,7 @@
 package com.inventoryapp.mobile.entity
 
-import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.versionedparcelable.ParcelField
 
 @Entity
 data class Item(
@@ -15,9 +13,3 @@ data class Item(
 )
 
 fun Item.isEmptyItem(): Boolean = skuId.isEmpty() && quantity == null
-//data class ItemDetails(
-//    val quantity: Int?,
-//    val measuringUnits: Units
-//)
-//
-//enum class Units { ML, LTR, CM, MTR, MG, GM, KG }

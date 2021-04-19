@@ -27,5 +27,7 @@
     <string name="unidentified_sku_dialog_message">Please click OK to save only Identified SKUs</string>
     <string name="unidentified_sku_positive_button_text">YES</string>
     <string name="unidentified_sku_negative_button_text">NO</string>
+    <string name="hint_enter_sku_id">Enter SKU ID</string>
+    <string name="hint_enter_qty">Enter Qty</string>
 
 </resources>

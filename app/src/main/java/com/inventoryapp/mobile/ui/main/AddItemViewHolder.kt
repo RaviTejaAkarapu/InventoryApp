@@ -1,7 +1,5 @@
 package com.inventoryapp.mobile.ui.main
 
-import android.view.View
-import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import com.inventoryapp.mobile.databinding.ViewHolderAddItemBinding
 import com.inventoryapp.mobile.entity.Item
@@ -24,22 +22,18 @@ class AddItemViewHolder(
         }
     }
 
-    private val focusChangeListener = View.OnFocusChangeListener { view, _ ->
-        when (view) {
-            is EditText -> {
-                binding.apply {
-                    if (skuIdEditText.text?.length == 6 && !quantityEditText.text.isNullOrEmpty()) {
-                        if (skuIdEditText.text.toString() != currentItem.skuId || quantityEditText.text.toString() != currentItem.quantity.toString()) {
-                            val updatedItem = Item(
-                                skuIdEditText.text.toString(),
-                                currentItem.itemName,
-                                currentItem.manufacturerName,
-                                quantityEditText.text.toString().toInt()
-                            )
-                            currentItem = updatedItem
-                            listener.updateItem(updatedItem, currentPosition)
-                        }
-                    }
+    private val quantityTextWatcher = AfterTextChanged(view = binding.quantityEditText) {
+        binding.apply {
+            if (skuIdEditText.text?.length == 6 && !quantityEditText.text.isNullOrEmpty()) {
+                if (skuIdEditText.text.toString() != currentItem.skuId || quantityEditText.text.toString() != currentItem.quantity.toString()) {
+                    val updatedItem = Item(
+                        skuIdEditText.text.toString(),
+                        currentItem.itemName,
+                        currentItem.manufacturerName,
+                        quantityEditText.text.toString().toInt()
+                    )
+                    currentItem = updatedItem
+                    listener.updateItem(updatedItem, currentPosition)
                 }
             }
         }
@@ -69,7 +63,7 @@ class AddItemViewHolder(
     fun setListeners() {
         binding.apply {
             skuIdEditText.addTextChangedListener(textWatcher)
-            quantityEditText.onFocusChangeListener = focusChangeListener
+            quantityEditText.addTextChangedListener(quantityTextWatcher)
         }
     }
 

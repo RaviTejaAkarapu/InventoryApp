@@ -29,6 +29,7 @@ class InventoryViewModel @Inject constructor(
     val allItemsFromDb: LiveData<List<Item>> = mutableGetAllItemsFromDb
     val existingItemWithSkuId: LiveData<HashMap<Int, Item?>> = mutableExistingItemWithSkuId
     lateinit var selectedItemList: List<Item>
+    lateinit var currentItemList: List<Item>
 
     init {
         viewModelScope.launch { itemRepository.insertDummyItemsList() }
