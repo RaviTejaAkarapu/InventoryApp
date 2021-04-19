@@ -41,7 +41,11 @@ class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener
         viewModel.networkStatusLiveData.observe(viewLifecycleOwner) { networkStatus ->
             networkStatus?.let {
                 setNetworkStatusView(isOnline = it.body() == true)
-            } ?: setNetworkStatusView(isOnline = false)
+                setSearchButtonEnabled(true)
+            } ?: run {
+                setNetworkStatusView(isOnline = false)
+                setSearchButtonEnabled(false)
+            }
         }
 
         viewModel.existingItemWithSkuId.observeForChange(viewLifecycleOwner) { map ->
@@ -92,6 +96,10 @@ class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener
                 viewModel.navigateToSearchInventoryFragment()
             }
         }
+    }
+
+    private fun setSearchButtonEnabled(isOnline: Boolean) {
+        binding.searchButton.isEnabled = isOnline
     }
 
     private fun setView() {

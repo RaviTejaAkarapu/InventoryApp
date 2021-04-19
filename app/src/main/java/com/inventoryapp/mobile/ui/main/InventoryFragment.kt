@@ -58,13 +58,13 @@ class InventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
         }
 
         binding.apply {
-            binding.fragmentTitle.text =
+            fragmentTitle.text =
                 if (fragmentView == InventoryViewAction.VIEW)
                     getString(R.string.view_inventory_fragment_name)
                 else
                     getString(R.string.search_inventory_fragment_name)
 
-            binding.addOrEditButton.text =
+            addOrEditButton.text =
                 if (fragmentView == InventoryViewAction.VIEW)
                     getString(R.string.edit_button_text)
                 else
@@ -72,8 +72,9 @@ class InventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
 
             setEditButtonClickable()
 
-            binding.itemSearchBox.addTextChangedListener(textWatcher)
-            binding.manufacturerDropdownBox.apply {
+            itemSearchBox.addTextChangedListener(textWatcher)
+
+            manufacturerDropdownBox.apply {
                 val manufacturerList: MutableList<String> = mutableListOf("Select")
                 lifecycleScope.launch {
                     manufacturerList.addAll(viewModel.getManufacturerListFromDb())
@@ -83,6 +84,8 @@ class InventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
                         R.layout.view_holder_spinner_unit,
                         manufacturerList
                     )
+
+                    val list: List<Item>? = viewModel.allItemsFromDb.value
                     onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(
                             parent: AdapterView<*>?,
@@ -91,25 +94,18 @@ class InventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
                             id: Long
                         ) {
                             if (position == 0) {
-                                if (fragmentView == InventoryViewAction.SEARCH)
-                                    viewModel.allItemsLiveData.value?.data?.let {
-                                        itemListAdapter.setItems(it.map { item ->
-                                            SelectableItem(item, isSelected = false)
-                                        } as ArrayList<SelectableItem>)
-                                    }
-                                else
-                                    viewModel.allItemsFromDb.value?.let {
-                                        itemListAdapter.setItems(it.map { item ->
-                                            SelectableItem(item, isSelected = false)
-                                        } as ArrayList<SelectableItem>)
-                                    }
+                                list?.let {
+                                    itemListAdapter.setItems(it.map { item ->
+                                        SelectableItem(item, isSelected = false)
+                                    } as ArrayList<SelectableItem>)
+                                }
                             } else {
-                                val list = mutableListOf<SelectableItem>()
-                                list.addAll(itemListAdapter.itemList.filter { selectableItem ->
-                                    selectableItem.item.manufacturerName.equals(manufacturerList[position])
-                                })
+                                val itemsFromManufacturer = list?.map { SelectableItem(it, false) }
+                                    ?.filter { selectableItem ->
+                                        selectableItem.item.manufacturerName.equals(manufacturerList[position])
+                                    }
                                 itemListAdapter.setItems(
-                                    list as ArrayList<SelectableItem>
+                                    itemsFromManufacturer as ArrayList<SelectableItem>
                                 )
                             }
                         }
@@ -223,3 +219,7 @@ class InventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
         SEARCH
     }
 }
+
+//fun <Item> List<Item>.toSelectableItem() = this.map { item ->
+//    SelectableItem(item, isSelected = false)
+//}
