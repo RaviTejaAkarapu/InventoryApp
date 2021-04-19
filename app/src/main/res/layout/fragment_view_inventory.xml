@@ -7,6 +7,8 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.InventoryFragment">
 
+
+
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
@@ -119,6 +121,7 @@
             app:layout_constraintStart_toEndOf="@id/item_search_box"
             app:layout_constraintTop_toTopOf="@id/item_search_box"
             app:layout_constraintBottom_toBottomOf="@id/item_search_box"/>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/item_recycler_view"

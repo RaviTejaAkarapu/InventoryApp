@@ -12,10 +12,9 @@ class ItemListAdapter(
 ) : RecyclerView.Adapter<ListItemViewHolder>() {
 
     interface ItemActionListener {
-        fun setEditButtonClickable()
     }
 
-    val itemList = ArrayList<SelectableItem>()
+    private val itemList = ArrayList<SelectableItem>()
 
     fun setItems(items: ArrayList<SelectableItem>) {
         this.itemList.clear()
@@ -40,7 +39,6 @@ class ItemListAdapter(
         holder.itemView.setOnClickListener {
             itemList[position].isSelected = itemList[position].isSelected.not()
             holder.setItemViewBgColor(itemList[position].isSelected)
-            listener.setEditButtonClickable()
         }
         holder.bindItem(currentItem.item)
     }

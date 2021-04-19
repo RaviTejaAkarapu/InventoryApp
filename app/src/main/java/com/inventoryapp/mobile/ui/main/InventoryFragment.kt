@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
 import com.inventoryapp.mobile.R
 import com.inventoryapp.mobile.databinding.FragmentViewInventoryBinding
 import com.inventoryapp.mobile.entity.Item
@@ -70,8 +70,6 @@ class InventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
                     getString(R.string.edit_button_text)
                 else
                     getString(R.string.select_button_text)
-
-            setEditButtonClickable()
 
             itemSearchBox.addTextChangedListener(textWatcher)
 
@@ -140,14 +138,6 @@ class InventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
         }
     }
 
-    override fun setEditButtonClickable() {
-        binding.apply {
-            addOrEditButton.isEnabled =
-                itemListAdapter.getSelectedItems()
-                    .isNotEmpty() && viewModel.currentItemList.isNotEmpty()
-        }
-    }
-
     private fun observeViewModel() {
         viewModel.networkStatusLiveData.observe(viewLifecycleOwner) { networkStatus ->
             networkStatus?.let {
@@ -170,7 +160,12 @@ class InventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
                     }
                     Resource.Status.Error -> {
                         binding.progressBar.isVisible = false
-                        Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show()
+                        Snackbar.make(
+                            requireContext(),
+                            binding.root,
+                            it.message.toString(),
+                            Snackbar.LENGTH_LONG
+                        )
                     }
                     Resource.Status.Loading -> {
                         binding.emptyInventoryView.isVisible = false

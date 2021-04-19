@@ -13,6 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 @InstallIn(SingletonComponent::class)
 interface NetworkModule {
     companion object {
+
         @Provides
         fun getHttpLoggingInterceptor(): HttpLoggingInterceptor {
             val httpLoggingInterceptor = HttpLoggingInterceptor()
@@ -21,7 +22,7 @@ interface NetworkModule {
         }
 
         @Provides
-        fun getOkHttpCleint(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+        fun getOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
             return OkHttpClient.Builder()
                 .addInterceptor(httpLoggingInterceptor)
                 .build();
@@ -30,7 +31,7 @@ interface NetworkModule {
         @Provides
         fun getRetrofit(okHttpClient: OkHttpClient): Retrofit {
             return Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/")
+                .baseUrl("https://damp-lowlands-09219.herokuapp.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build()

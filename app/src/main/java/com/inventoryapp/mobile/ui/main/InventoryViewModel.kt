@@ -32,7 +32,7 @@ class InventoryViewModel @Inject constructor(
     lateinit var currentItemList: List<Item>
 
     init {
-        viewModelScope.launch { itemRepository.insertDummyItemsList() }
+//        viewModelScope.launch { itemRepository.insertDummyItemsList() }
 //        viewModelScope.launch { itemRepository.deleteAllItemsFromDB() }
     }
 
