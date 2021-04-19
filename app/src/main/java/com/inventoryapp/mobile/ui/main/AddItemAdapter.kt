@@ -64,8 +64,9 @@ class AddItemAdapter(
     override fun onCloseRowButtonClicked(position: Int) {
         if (position == itemCount - 1) {
             if (!itemList[position].isEmptyItem()) {
-                addItems(itemList.filter { item -> item != itemList[position] } as ArrayList<Item>)
-                addItems(arrayListOf(Item("", "", "")))
+                val list = itemList.filter { item -> item != itemList[position] } as ArrayList<Item>
+                list.add(Item("", "", ""))
+                addItems(list)
             }
         } else {
             addItems(itemList.filter { item -> item != itemList[position] } as ArrayList<Item>)

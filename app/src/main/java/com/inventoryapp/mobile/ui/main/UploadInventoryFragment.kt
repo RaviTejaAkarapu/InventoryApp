@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.inventoryapp.mobile.R
 import com.inventoryapp.mobile.databinding.FragmentUploadInventoryBinding
 import com.inventoryapp.mobile.entity.Item
 import com.inventoryapp.mobile.util.observeForChange
@@ -70,9 +71,9 @@ class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener
                 val itemList = addItemAdapter.itemList.filter { item -> item.skuId.isNotEmpty() }
                 if (itemList.any { viewModel.getSKUListFromDb().contains(it.skuId).not() })
                     AlertDialog.Builder(requireContext())
-                        .setTitle("This list has unidentified SKUs")
-                        .setMessage("Please click OK to save only Identified SKUs")
-                        .setPositiveButton("YES") { _, _ ->
+                        .setTitle(getString(R.string.unidentified_sku_dialog_title))
+                        .setMessage(getString(R.string.unidentified_sku_dialog_message))
+                        .setPositiveButton(getString(R.string.unidentified_sku_positive_button_text)) { _, _ ->
                             viewModel.insertItemListToDb(
                                 itemList.filter { item ->
                                     viewModel.getSKUListFromDb().contains(item.skuId)
@@ -80,7 +81,10 @@ class UploadInventoryFragment : Fragment(), AddItemAdapter.AddItemActionListener
                             )
                             viewModel.navigateToViewInventoryFragment()
                         }
-                        .setNegativeButton("NO", null)
+                        .setNegativeButton(
+                            getString(R.string.unidentified_sku_negative_button_text),
+                            null
+                        )
                         .create()
                         .show()
                 else {

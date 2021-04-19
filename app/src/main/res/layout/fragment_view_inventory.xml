@@ -65,6 +65,7 @@
         android:id="@+id/item_list_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@id/add_or_edit_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,12 +79,13 @@
             android:text="@string/item_name"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/item_search_box"
-            app:layout_constraintStart_toStartOf="@id/item_search_box"
-            app:layout_constraintTop_toTopOf="@id/item_search_box" />
+            app:layout_constraintStart_toStartOf="@id/item_search_box" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/item_search_box"
             style="@style/Widget.AppCompat.EditText"
+            android:background="@drawable/list_item_border"
+            android:padding="12dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -103,21 +105,20 @@
             android:text="@string/manufacturer"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/manufacturer_dropdown_box"
-            app:layout_constraintStart_toStartOf="@id/manufacturer_dropdown_box"
-            app:layout_constraintTop_toTopOf="@id/manufacturer_dropdown_box" />
+            app:layout_constraintStart_toStartOf="@id/manufacturer_dropdown_box" />
 
         <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/manufacturer_dropdown_box"
+            android:background="@drawable/list_item_border"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginEnd="32dp"
-            android:padding="24dp"
             android:textSize="18sp"
             tools:listitem="@layout/view_holder_spinner_unit"
-            app:layout_constraintBottom_toBottomOf="@+id/item_search_box"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/item_search_box"
-            app:layout_constraintTop_toTopOf="@id/item_search_box" />
+            app:layout_constraintTop_toTopOf="@id/item_search_box"
+            app:layout_constraintBottom_toBottomOf="@id/item_search_box"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/item_recycler_view"

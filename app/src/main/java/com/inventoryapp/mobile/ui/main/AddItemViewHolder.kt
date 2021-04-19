@@ -56,7 +56,13 @@ class AddItemViewHolder(
             itemName.text = item.itemName
             manufacturerName.text = item.manufacturerName
             manufacturerName.text = item.manufacturerName
-            closeEditRow.setOnClickListener { listener.onCloseRowButtonClicked(position) }
+            closeEditRow.setOnClickListener {
+                quantityEditText.setText("")
+                skuIdEditText.setText("")
+                skuIdEditText.clearFocus()
+                quantityEditText.clearFocus()
+                listener.onCloseRowButtonClicked(position)
+            }
         }
     }
 

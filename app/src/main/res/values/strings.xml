@@ -23,5 +23,9 @@
     <string name="upload_inventory_fragment_name">Upload Inventory</string>
     <string name="search_button_text">Search</string>
     <string name="save_button_text">Save</string>
+    <string name="unidentified_sku_dialog_title">This list has unidentified SKUs</string>
+    <string name="unidentified_sku_dialog_message">Please click OK to save only Identified SKUs</string>
+    <string name="unidentified_sku_positive_button_text">YES</string>
+    <string name="unidentified_sku_negative_button_text">NO</string>
 
 </resources>
