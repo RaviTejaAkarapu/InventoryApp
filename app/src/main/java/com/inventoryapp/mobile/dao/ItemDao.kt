@@ -32,7 +32,7 @@ interface ItemDao {
     @Query("SELECT * FROM Item where skuId = :skuId")
     suspend fun getItemsBySkuId(skuId: String): Item?
 
-    @Query("SELECT * FROM Item where itemName LIKE ('%' || :query || '% - %')")
+    @Query("SELECT * FROM Item where itemName LIKE ('%' || :query || '%-%')")
     suspend fun getItemsByQuery(query: String): List<Item>?
 
     @Query("SELECT * FROM Item where manufacturerName LIKE :manufacturer")

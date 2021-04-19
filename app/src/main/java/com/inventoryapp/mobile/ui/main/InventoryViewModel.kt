@@ -33,7 +33,7 @@ class InventoryViewModel @Inject constructor(
     lateinit var selectedItemList: List<Item>
 
     init {
-//        viewModelScope.launch { itemRepository.insertDummyItemsList() }
+        viewModelScope.launch { itemRepository.insertDummyItemsList() }
 //        viewModelScope.launch { itemRepository.deleteAllItemsFromDB() }
     }
 
@@ -68,8 +68,8 @@ class InventoryViewModel @Inject constructor(
 
     @OptIn(InternalCoroutinesApi::class)
     fun setNetworkStatus() {
-        val interval = 1000L
-        viewModelScope.launch(Dispatchers.Unconfined) {
+        val interval = 3000L
+        viewModelScope.launch(Dispatchers.Default) {
             while (NonCancellable.isActive) {
                 Result.runCatching {
                     itemRepository.healthCheck()

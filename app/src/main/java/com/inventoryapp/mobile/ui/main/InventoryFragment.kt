@@ -66,9 +66,9 @@ class InventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
 
             binding.addOrEditButton.text =
                 if (fragmentView == InventoryViewAction.VIEW)
-                getString(R.string.edit_button_text)
-            else
-                getString(R.string.select_button_text)
+                    getString(R.string.edit_button_text)
+                else
+                    getString(R.string.select_button_text)
 
             setEditButtonClickable()
 
