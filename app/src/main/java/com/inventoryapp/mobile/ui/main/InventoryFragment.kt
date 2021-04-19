@@ -1,11 +1,13 @@
 package com.inventoryapp.mobile.ui.main
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -160,12 +162,17 @@ class InventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
                     }
                     Resource.Status.Error -> {
                         binding.progressBar.isVisible = false
-                        Snackbar.make(
+                        val snack = Snackbar.make(
                             requireContext(),
                             binding.emptyInventoryView,
                             it.message.toString(),
                             Snackbar.LENGTH_LONG
                         )
+                        val view: View = snack.view
+                        val params = view.layoutParams as FrameLayout.LayoutParams
+                        params.gravity = Gravity.TOP
+                        view.layoutParams = params
+                        snack.show()
                     }
                     Resource.Status.Loading -> {
                         binding.emptyInventoryView.isVisible = false

@@ -67,7 +67,7 @@ class InventoryViewModel @Inject constructor(
 
     @OptIn(InternalCoroutinesApi::class)
     fun setNetworkStatus() {
-        val interval = 3000L
+        val interval = 15000L
         viewModelScope.launch(Dispatchers.Default) {
             while (NonCancellable.isActive) {
                 Result.runCatching {
