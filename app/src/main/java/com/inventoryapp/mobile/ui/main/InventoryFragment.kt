@@ -162,7 +162,7 @@ class InventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
                         binding.progressBar.isVisible = false
                         Snackbar.make(
                             requireContext(),
-                            binding.root,
+                            binding.emptyInventoryView,
                             it.message.toString(),
                             Snackbar.LENGTH_LONG
                         )
