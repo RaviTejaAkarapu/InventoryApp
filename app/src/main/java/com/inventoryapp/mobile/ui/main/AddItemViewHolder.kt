@@ -24,7 +24,7 @@ class AddItemViewHolder(
         }
     }
 
-    private val focusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
+    private val focusChangeListener = View.OnFocusChangeListener { view, _ ->
         when (view) {
             is EditText -> {
                 binding.apply {

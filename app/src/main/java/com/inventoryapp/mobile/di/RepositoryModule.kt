@@ -20,9 +20,9 @@ import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
-@Module(includes = [NetworkMonitorModule::class, NetworkModule::class])
+@Module(includes = [NetworkModule::class])
 @InstallIn(SingletonComponent::class)
-interface ItemRepositoryModule {
+interface RepositoryModule {
 
     @Binds
     fun bindsItemRepository(

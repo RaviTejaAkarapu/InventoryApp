@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.inventoryapp.mobile.entity.Item
-import com.inventoryapp.mobile.networkNotification.NetworkMonitor
 import com.inventoryapp.mobile.repository.ItemRepository
 import com.inventoryapp.mobile.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,8 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class InventoryViewModel @Inject constructor(
-    private val itemRepository: ItemRepository,
-    private val networkMonitor: NetworkMonitor
+    private val itemRepository: ItemRepository
 ) : ViewModel() {
 
     private val mutableInventoryAction = MutableLiveData<InventoryAction>()
