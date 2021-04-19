@@ -18,7 +18,7 @@ class AddItemViewHolder(
 
     private val textWatcher = AfterTextChanged {
         binding.apply {
-            if (skuIdEditText.text?.length == 6) {
+            if (skuIdEditText.text?.length == 6 && currentItem.skuId != skuIdEditText.text.toString()) {
                 listener.checkForExistingSkuId(skuIdEditText.text.toString(), currentPosition)
             }
         }
