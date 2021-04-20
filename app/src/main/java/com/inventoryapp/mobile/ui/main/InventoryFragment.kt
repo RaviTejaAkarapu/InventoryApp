@@ -158,7 +158,6 @@ class InventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
                                 SelectableItem(item, isSelected = false)
                             })
                         )
-                        handleItemListView(hasItems = !it.data.isNullOrEmpty())
                     }
                     Resource.Status.Error -> {
                         binding.progressBar.isVisible = false
@@ -184,7 +183,6 @@ class InventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
             viewModel.allItemsFromDb.observeForChange(viewLifecycleOwner) { itemList ->
                 viewModel.currentItemList = itemList
                 binding.progressBar.isVisible = true
-                binding.emptyInventoryView.isVisible = itemList.isNullOrEmpty()
                 itemListAdapter.setItems(
                     ArrayList(itemList?.map { item ->
                         SelectableItem(item, isSelected = false)
@@ -194,7 +192,7 @@ class InventoryFragment : Fragment(), ItemListAdapter.ItemActionListener {
             }
     }
 
-    private fun handleItemListView(hasItems: Boolean) {
+    override fun handleItemListView(hasItems: Boolean) {
         binding.run {
             emptyInventoryView.isVisible = !hasItems
             itemListView.isVisible = hasItems

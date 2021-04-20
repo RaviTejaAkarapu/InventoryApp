@@ -10,8 +10,8 @@ import com.inventoryapp.mobile.entity.SelectableItem
 class ItemListAdapter(
     private val listener: ItemActionListener
 ) : RecyclerView.Adapter<ListItemViewHolder>() {
-
     interface ItemActionListener {
+        fun handleItemListView(hasItems: Boolean)
     }
 
     private val itemList = ArrayList<SelectableItem>()
@@ -19,6 +19,7 @@ class ItemListAdapter(
     fun setItems(items: ArrayList<SelectableItem>) {
         this.itemList.clear()
         this.itemList.addAll(items)
+        listener.handleItemListView(itemCount != 0)
         notifyDataSetChanged()
     }
 
