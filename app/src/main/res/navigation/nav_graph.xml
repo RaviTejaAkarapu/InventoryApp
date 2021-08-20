@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/viewInventoryFragment">
+
+    <fragment
+        android:id="@+id/viewInventoryFragment"
+        android:name="com.inventoryapp.mobile.ui.main.InventoryFragment"
+        android:label="fragment_view_inventory"
+        tools:layout="@layout/fragment_view_inventory" >
+        <action
+            android:id="@+id/action_viewInventoryFragment_to_uploadInventoryFragment"
+            app:destination="@id/uploadInventoryFragment" />
+        <argument
+            android:name="InventoryViewAction"
+            app:argType="com.inventoryapp.mobile.ui.main.InventoryFragment$InventoryViewAction"
+            android:defaultValue="VIEW" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/uploadInventoryFragment"
+        android:name="com.inventoryapp.mobile.ui.main.UploadInventoryFragment"
+        android:label="fragment_upload_inventory"
+        tools:layout="@layout/fragment_upload_inventory" >
+        <action
+            android:id="@+id/action_uploadInventoryFragment_to_viewInventoryFragment"
+            app:destination="@id/viewInventoryFragment" />
+    </fragment>
+</navigation>
